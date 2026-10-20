@@ -5,6 +5,8 @@ import { Command } from "cmdk";
 import { useRouter } from "next/navigation";
 import { allProjects } from "@/data/portfolio";
 import { siteConfig } from "@/data/site";
+import { THEMES } from "@/lib/theme";
+import { useTheme } from "@/components/layout/theme-provider";
 import { cn } from "@/lib/utils";
 
 interface CommandPaletteProps {
@@ -15,6 +17,11 @@ interface CommandPaletteProps {
 export function CommandPalette({ open, onOpenChange }: CommandPaletteProps) {
   const router = useRouter();
   const [value, setValue] = React.useState("");
+  const { setTheme } = useTheme();
+
+  const toast = React.useCallback((message: string) => {
+    window.dispatchEvent(new CustomEvent("sm:toast", { detail: message }));
+  }, []);
 
   React.useEffect(() => {
     if (!open) {
@@ -43,7 +50,7 @@ export function CommandPalette({ open, onOpenChange }: CommandPaletteProps) {
   const copy = async (text: string) => {
     try {
       await navigator.clipboard.writeText(text);
-      window.dispatchEvent(new CustomEvent("sm:toast", { detail: "[ COPIED ]" }));
+      toast("[ COPIED ]");
     } catch {
       // ignore
     }
@@ -87,6 +94,20 @@ export function CommandPalette({ open, onOpenChange }: CommandPaletteProps) {
               {allProjects.map((p) => (
                 <Item key={p.slug} onSelect={() => navigate(`/work/${p.slug}`)}>
                   {p.title}
+                </Item>
+              ))}
+            </Command.Group>
+            <Command.Group heading={<span className="px-2 font-mono text-xs uppercase tracking-widest text-muted-teal">Theme</span>}>
+              {THEMES.map((theme) => (
+                <Item
+                  key={theme.id}
+                  onSelect={() => {
+                    setTheme(theme.id);
+                    toast(`[ THEME ] ${theme.label}`);
+                    onOpenChange(false);
+                  }}
+                >
+                  Theme: {theme.label}
                 </Item>
               ))}
             </Command.Group>

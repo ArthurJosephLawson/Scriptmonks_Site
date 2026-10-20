@@ -79,3 +79,15 @@ SSR smoke (dev server, `curl localhost:3199`): navbar `scriptmonks` +
 - `src/data/portfolio.test.ts:50` asserts the lonewolf year placeholder.
 - `README.md` "Content to fill before launch" list (partly stale vs current grep).
 - V4 adds later: `@monk_mango` public confirmation (V4-4), DeployMonk repo URL (V4-4).
+
+## V4-1 — rename Scriptmonks → ScriptMønks (2026-10-20)
+
+**Status: DONE.** Commit after `8c6c947`.
+
+- Display copy renamed everywhere: layout metadata (title template `%s | ScriptMønks`, default `ScriptMønks | Software House & Digital Agency`, OG/Twitter templates, `siteName`), page titles shortened to inherit the template, JSON-LD `name` + `alternateName: ["Scriptmonks","Script Monks"]`, metadata `keywords`, `siteConfig.name`/`description` (footer brand + copyright `© 2026 ScriptMønks`), navbar wordmark `scriptmønks` + blinking `_` (kept), all page copy, terminal-status prefix `$ scriptmønks --status`, boot splash `> booting scriptmønks...`, OG image alt, README (title + `scriptmonks.com` example URL).
+- Fonts: `subsets: ["latin","latin-ext"]` + `display: "swap"` on both `next/font/google` calls — `ø` renders.
+- Email subjects `[ScriptMønks] …` via exported `buildOrderSubject`/`buildContactSubject`, unit-tested (+2 tests). `RESEND_FROM` fallback stays ASCII `Scriptmonks Leads <…>` (deliverability; cannot test Resend acceptance offline — SPEC_V4 §2.2 fallback).
+- `scripts/brand-check.mjs` created (regex `/script[\s_.-]?monks/i`; allowlist: owner email, `Script_monks`, `scriptmonks.com`, `alternateName`, `keywords`, `RESEND_FROM`); wired as `brand:check` into `verify` and `prebuild`. Output: `brand-check: OK (95 files scanned, 0 violations)`.
+- OG image: `ø` is baked into `logo-full.png` artwork; image text is the tagline only — no satori font change needed.
+- Gates: lint 0, typecheck 0, test 53/53, build 0, verify 0. SSR smoke: `<title>ScriptMønks | …`, `scriptmønks` ×2, `alternateName` present, `© … ScriptMønks` in RSC payload.
+- Ruling: page titles de-duplicated so the layout template is the single source of the `| ScriptMønks` suffix. Cost if wrong: revert per page.

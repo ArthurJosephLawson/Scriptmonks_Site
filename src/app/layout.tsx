@@ -5,6 +5,8 @@ import { DotMatrix } from "@/components/layout/dot-matrix";
 import { Footer } from "@/components/layout/footer";
 import { Navbar } from "@/components/layout/navbar";
 import { CommandPaletteProvider } from "@/components/layout/command-palette-provider";
+import { ThemeProvider } from "@/components/layout/theme-provider";
+import { ThemeInitScript } from "@/components/layout/theme-init-script";
 import { ToastProvider } from "@/components/toast/toast-provider";
 import { ScrollProgress } from "@/components/layout/scroll-progress";
 import { siteConfig } from "@/data/site";
@@ -57,16 +59,19 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="en" className={`${fontMono.variable} ${fontSans.variable}`}>
       <body>
+        <ThemeInitScript />
         <BootSplash />
-        <CommandPaletteProvider>
-          <ToastProvider>
-            <ScrollProgress />
-            <DotMatrix />
-            <Navbar />
-            {children}
-            <Footer />
-          </ToastProvider>
-        </CommandPaletteProvider>
+        <ThemeProvider>
+          <CommandPaletteProvider>
+            <ToastProvider>
+              <ScrollProgress />
+              <DotMatrix />
+              <Navbar />
+              {children}
+              <Footer />
+            </ToastProvider>
+          </CommandPaletteProvider>
+        </ThemeProvider>
       </body>
     </html>
   );

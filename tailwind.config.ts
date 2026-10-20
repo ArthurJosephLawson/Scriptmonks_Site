@@ -11,7 +11,11 @@ const config: Config = {
           raised: "#122A2F",
           border: "#1D3B41",
         },
-        accent: { coral: "#FF7A65", "coral-dim": "#C85B4B" },
+        accent: {
+          DEFAULT: "rgb(var(--accent-coral) / <alpha-value>)",
+          coral: "rgb(var(--accent-coral) / <alpha-value>)",
+          "coral-dim": "rgb(var(--accent-coral-dim) / <alpha-value>)",
+        },
         muted: { teal: "#6F9399" },
         ink: "#E8F2F3",
         matrix: { dot: "#2A4A50" },

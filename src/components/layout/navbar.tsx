@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useCallback, useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { ThemeSwitcher } from "@/components/layout/theme-switcher";
 import { cn } from "@/lib/utils";
 
 const WORK_MENU = [
@@ -185,6 +186,8 @@ export function Navbar() {
             {isMac ? "[ ⌘K ]" : "[ CTRL K ]"}
           </button>
 
+          <ThemeSwitcher />
+
           <Button href="/order">ORDER PROJECT</Button>
         </nav>
 
@@ -210,6 +213,9 @@ export function Navbar() {
         )}
       >
         <div className="flex flex-col gap-4 px-6 py-6">
+          <div className="flex justify-start">
+            <ThemeSwitcher />
+          </div>
           <Link href="/#services" className={linkClass()} onClick={close}>
             [ SERVICES ]
           </Link>
