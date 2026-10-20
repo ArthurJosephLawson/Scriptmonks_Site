@@ -50,7 +50,7 @@ export function BootSplash() {
     >
       <Image src="/brand/logo-mark-coral.png" alt="" width={186} height={351} className="h-24 w-auto animate-fade-in" />
       <div className="mt-8 space-y-1 text-left font-mono text-xs text-muted-teal">
-        <div className="opacity-90">&gt; booting scriptmonks...</div>
+        <div className="opacity-90">&gt; booting scriptmønks...</div>
         <div className="opacity-90">&gt; loading modules [ OK ]</div>
         <div className="opacity-90">&gt; ready_</div>
       </div>

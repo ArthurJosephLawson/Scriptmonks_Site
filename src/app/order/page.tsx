@@ -4,8 +4,8 @@ import { OrderWizard } from "@/components/order/order-wizard";
 import { SectionLabel } from "@/components/layout/section-label";
 
 export const metadata: Metadata = {
-  title: "Order a Project | Scriptmonks",
-  description: "Scope your project and send Scriptmonks a order.",
+  title: "Order a Project",
+  description: "Scope your project and send ScriptMønks an order.",
 };
 
 const NEXT_STEPS = [

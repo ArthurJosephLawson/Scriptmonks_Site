@@ -13,7 +13,8 @@ const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
 const jsonLd = {
   "@context": "https://schema.org",
   "@type": "Organization",
-  name: "Scriptmonks",
+  name: "ScriptMønks",
+  alternateName: ["Scriptmonks", "Script Monks"],
   url: siteUrl,
   description: siteConfig.description,
   email: siteConfig.links.email,

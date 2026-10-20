@@ -29,10 +29,10 @@ export interface SiteConfig {
 export const currentYear = new Date().getFullYear();
 
 export const siteConfig: SiteConfig = {
-  name: "scriptmonks",
+  name: "ScriptMønks",
   tagline: "We write the scripts that run your ideas.",
   description:
-    "Scriptmonks is a solo-founded software house. Full-stack apps, CLI tools, desktop utilities, and API backends, shipped clean and on time.",
+    "ScriptMønks is a solo-founded software house. Full-stack apps, CLI tools, desktop utilities, and API backends, shipped clean and on time.",
   availability: "open",
   siteUrl: process.env.NEXT_PUBLIC_SITE_URL ?? "https://scriptmonks.com",
   links: {

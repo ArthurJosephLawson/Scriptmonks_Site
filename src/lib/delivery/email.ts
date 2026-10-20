@@ -71,6 +71,10 @@ export function buildOrderText(payload: ProjectOrderPayload, ref: string): strin
   ].join("\n");
 }
 
+export function buildOrderSubject(ref: string, title: string): string {
+  return `[ScriptMønks] New order ${ref}: ${clip(title, 60)}`;
+}
+
 export async function deliverEmail(
   payload: ProjectOrderPayload,
   ref: string,
@@ -85,7 +89,7 @@ export async function deliverEmail(
     from: process.env.RESEND_FROM ?? "Scriptmonks Leads <onboarding@resend.dev>",
     to: [process.env.LEAD_TO_EMAIL ?? "script.monks.mail@gmail.com"],
     replyTo: payload.contact.email,
-    subject: `[Scriptmonks] New order ${ref}: ${clip(payload.brief.title, 60)}`,
+    subject: buildOrderSubject(ref, payload.brief.title),
     html: buildOrderHtml(payload, ref),
     text: buildOrderText(payload, ref),
   });

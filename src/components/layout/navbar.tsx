@@ -113,10 +113,10 @@ export function Navbar() {
   return (
     <header className="sticky top-0 z-50 border-b border-dark-border bg-dark/80 backdrop-blur">
       <div className="mx-auto flex max-w-content items-center justify-between px-6 py-4">
-        <Link href="/" className="flex items-center gap-2.5" onClick={close} aria-label="Scriptmonks home">
-          <Image src="/brand/logo-mark.png" alt="Scriptmonks" width={186} height={351} className="h-10 w-auto" priority />
+        <Link href="/" className="flex items-center gap-2.5" onClick={close} aria-label="ScriptMønks home">
+          <Image src="/brand/logo-mark.png" alt="ScriptMønks" width={186} height={351} className="h-10 w-auto" priority />
           <span className="font-mono text-sm tracking-[0.2em] text-ink">
-            scriptmonks
+            scriptmønks
             <span aria-hidden className="animate-blink text-accent-coral">
               _
             </span>

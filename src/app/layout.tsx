@@ -12,31 +12,43 @@ import "./globals.css";
 
 const fontMono = JetBrains_Mono({
   variable: "--font-mono",
-  subsets: ["latin"],
+  subsets: ["latin", "latin-ext"],
+  display: "swap",
 });
 
 const fontSans = Manrope({
   variable: "--font-sans",
-  subsets: ["latin"],
+  subsets: ["latin", "latin-ext"],
+  display: "swap",
 });
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
-  title: "Scriptmonks | Software House & Digital Agency",
+  title: {
+    default: "ScriptMønks | Software House & Digital Agency",
+    template: "%s | ScriptMønks",
+  },
   description: siteConfig.description,
+  keywords: ["ScriptMønks", "Scriptmonks", "Script Monks", "software house", "digital agency"],
   openGraph: {
-    title: "Scriptmonks | Software House & Digital Agency",
+    title: {
+      default: "ScriptMønks | Software House & Digital Agency",
+      template: "%s | ScriptMønks",
+    },
     description: siteConfig.description,
     url: siteUrl,
-    siteName: "Scriptmonks",
+    siteName: "ScriptMønks",
     locale: "en",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Scriptmonks | Software House & Digital Agency",
+    title: {
+      default: "ScriptMønks | Software House & Digital Agency",
+      template: "%s | ScriptMønks",
+    },
     description: siteConfig.description,
   },
 };

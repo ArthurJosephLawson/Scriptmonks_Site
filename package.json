@@ -10,9 +10,10 @@
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "sync:screenshots": "node scripts/sync-screenshots.mjs",
-    "verify": "node scripts/sync-screenshots.mjs && node scripts/check-brand.mjs && node scripts/confidentiality-check.mjs",
+    "brand:check": "node scripts/brand-check.mjs",
+    "verify": "node scripts/sync-screenshots.mjs && node scripts/check-brand.mjs && node scripts/confidentiality-check.mjs && node scripts/brand-check.mjs",
     "predev": "node scripts/sync-screenshots.mjs",
-    "prebuild": "node scripts/sync-screenshots.mjs && node scripts/confidentiality-check.mjs"
+    "prebuild": "node scripts/sync-screenshots.mjs && node scripts/confidentiality-check.mjs && node scripts/brand-check.mjs"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.9.2",

@@ -4,9 +4,9 @@ import { SectionLabel } from "@/components/layout/section-label";
 import { siteConfig } from "@/data/site";
 
 export const metadata: Metadata = {
-  title: "Privacy | Scriptmonks",
+  title: "Privacy",
   description:
-    "What the Scriptmonks order and contact forms collect and how it is handled.",
+    "What the ScriptMønks order and contact forms collect and how it is handled.",
 };
 
 export default function PrivacyPage() {
@@ -21,7 +21,7 @@ export default function PrivacyPage() {
         <p>
           The order and contact forms collect the fields shown: name, email,
           optional GitHub username and company, and the project brief. Submitted
-          details are delivered by email to Scriptmonks. There are no analytics
+          details are delivered by email to ScriptMønks. There are no analytics
           and no third-party trackers.
         </p>
         <p>

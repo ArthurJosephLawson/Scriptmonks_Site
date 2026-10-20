@@ -4,9 +4,9 @@ import { Accordion } from "@/components/ui/accordion";
 import { FAQ_ITEMS } from "@/data/faq";
 
 export const metadata: Metadata = {
-  title: "FAQ | Scriptmonks",
+  title: "FAQ",
   description:
-    "How Scriptmonks projects run, who you work with, code ownership, and what we build.",
+    "How ScriptMønks projects run, who you work with, code ownership, and what we build.",
 };
 
 export default function FaqPage() {

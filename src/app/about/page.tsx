@@ -4,9 +4,9 @@ import { SectionLabel } from "@/components/layout/section-label";
 import { siteConfig } from "@/data/site";
 
 export const metadata: Metadata = {
-  title: "About | Scriptmonks",
+  title: "About",
   description:
-    "Scriptmonks is a solo-founded independent software development house, digital agency and software incubator.",
+    "ScriptMønks is a solo-founded independent software development house, digital agency and software incubator.",
 };
 
 const LINKS = [

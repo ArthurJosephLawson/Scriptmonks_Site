@@ -11,7 +11,7 @@ export function AboutTeaser() {
           One developer, direct line
         </h2>
         <p className="mt-6 max-w-2xl text-base text-muted-teal">
-          Scriptmonks is a solo-founded independent software development house,
+          ScriptMønks is a solo-founded independent software development house,
           digital agency and software incubator. It runs a hybrid model: client
           client work for cash flow, proprietary products for equity and brand
           authority.

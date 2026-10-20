@@ -1,6 +1,21 @@
 import { describe, expect, it } from "vitest";
-import { buildOrderHtml, escapeHtml } from "@/lib/delivery/email";
+import { buildOrderHtml, buildOrderSubject, escapeHtml } from "@/lib/delivery/email";
+import { buildContactSubject } from "@/lib/delivery/contact-email";
 import type { ProjectOrderPayload } from "@/types/order";
+
+describe("brand subject builders", () => {
+  it("order subject shows [ScriptMønks]", () => {
+    expect(buildOrderSubject("SM-TEST01", "Title")).toBe(
+      "[ScriptMønks] New order SM-TEST01: Title",
+    );
+  });
+
+  it("contact subject shows [ScriptMønks]", () => {
+    expect(buildContactSubject("General inquiry", "Ada")).toBe(
+      "[ScriptMønks] General inquiry: Ada",
+    );
+  });
+});
 
 describe("escapeHtml", () => {
   it("escapes all HTML-special characters", () => {

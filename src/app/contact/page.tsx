@@ -5,8 +5,8 @@ import { ContactForm } from "@/components/contact/contact-form";
 import { siteConfig } from "@/data/site";
 
 export const metadata: Metadata = {
-  title: "Contact | Scriptmonks",
-  description: "Contact Scriptmonks about a project or a question.",
+  title: "Contact",
+  description: "Contact ScriptMønks about a project or a question.",
 };
 
 const CONNECT = [

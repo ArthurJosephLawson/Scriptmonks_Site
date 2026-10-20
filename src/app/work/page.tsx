@@ -4,9 +4,9 @@ import { SectionLabel } from "@/components/layout/section-label";
 import { WorkBrowser } from "@/components/work/work-browser";
 
 export const metadata: Metadata = {
-  title: "All Work | Scriptmonks",
+  title: "All Work",
   description:
-    "Client work, in-house products, private systems and lab builds by Scriptmonks.",
+    "Client work, in-house products, private systems and lab builds by ScriptMønks.",
 };
 
 export default function WorkPage() {

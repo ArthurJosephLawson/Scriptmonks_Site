@@ -29,12 +29,12 @@ export function generateStaticParams() {
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = await params;
   const project = projects.find((p) => p.slug === slug);
-  if (!project) return { title: "Not Found | Scriptmonks" };
+  if (!project) return { title: "Not Found" };
   return {
-    title: `${project.title} | Work | Scriptmonks`,
+    title: `${project.title} | Work`,
     description: project.tagline,
     openGraph: {
-      title: `${project.title} | Scriptmonks`,
+      title: project.title,
       description: project.tagline,
     },
   };
@@ -87,7 +87,7 @@ export default async function CaseStudyPage({ params }: PageProps) {
           role="note"
           className="mt-8 border border-dark-border bg-dark-surface p-4 font-mono text-xs uppercase tracking-widest text-muted-teal"
         >
-          [ PRIVATE · CLOSED SOURCE ] This is Scriptmonks&apos; own system. It is
+          [ PRIVATE · CLOSED SOURCE ] This is ScriptMønks&apos; own system. It is
           not open source and there is no public repository.
         </p>
       ) : null}

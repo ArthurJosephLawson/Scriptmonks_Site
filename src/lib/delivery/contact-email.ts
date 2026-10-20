@@ -64,6 +64,10 @@ function clip(str: string, max: number): string {
   return `${str.slice(0, Math.max(0, max - 1))}…`;
 }
 
+export function buildContactSubject(subjectKind: string, name: string): string {
+  return `[ScriptMønks] ${subjectKind}: ${clip(name, 60)}`;
+}
+
 export async function deliverContact(
   payload: ContactPayload,
   ref: string,
@@ -79,7 +83,7 @@ export async function deliverContact(
     from: process.env.RESEND_FROM ?? "Scriptmonks Leads <onboarding@resend.dev>",
     to: [process.env.LEAD_TO_EMAIL ?? "script.monks.mail@gmail.com"],
     replyTo: payload.email,
-    subject: `[Scriptmonks] ${subjectKind}: ${clip(payload.name, 60)}`,
+    subject: buildContactSubject(subjectKind, payload.name),
     html: buildContactHtml(payload, ref),
     text: buildContactText(payload, ref),
   });

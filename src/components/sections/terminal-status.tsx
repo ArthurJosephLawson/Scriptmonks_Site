@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from "react";
 
-const PREFIX_STATUS = "$ scriptmonks --status\n";
+const PREFIX_STATUS = "$ scriptmønks --status\n";
 const PREFIX_PROJECTS = "> projects_delivered: ";
 const PREFIX_PRODUCTS = "> products_shipped: ";
 const PREFIX_ACCEPTING = "> accepting_orders: ";

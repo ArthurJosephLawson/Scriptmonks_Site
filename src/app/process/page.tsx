@@ -4,9 +4,9 @@ import { PROCESS_STAGES } from "@/data/process";
 import { siteConfig } from "@/data/site";
 
 export const metadata: Metadata = {
-  title: "Process | Scriptmonks",
+  title: "Process",
   description:
-    "The six-stage Scriptmonks client lifecycle: lead qualification to final transfer.",
+    "The six-stage ScriptMønks client lifecycle: lead qualification to final transfer.",
 };
 
 export default function ProcessPage() {

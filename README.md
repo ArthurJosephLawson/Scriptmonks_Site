@@ -1,4 +1,4 @@
-# Scriptmonks — marketing site + order portal
+# ScriptMønks — marketing site + order portal
 
 Next.js 16 (App Router) + TypeScript strict + Tailwind v3.4. Solo software-house
 site with an interactive project-ordering flow (`/order`) that delivers leads
@@ -73,7 +73,7 @@ mailto fallback in the UI.
 2. Set the environment variables above in **Project → Settings → Environment
    Variables** (Production + Preview).
 3. Set `NEXT_PUBLIC_SITE_URL` to the production origin (e.g.
-   `https://scriptmonks.site`).
+   `https://scriptmonks.com`).
 4. Deploy. `/order` and `/api/order` are dynamic; `/`, `/sitemap.xml`,
    `/robots.txt` are static.
 5. Point the Resend domain at production values.
