@@ -59,7 +59,15 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="en" className={`${fontMono.variable} ${fontSans.variable}`}>
+    // The pre-paint theme script (ThemeInitScript) sets `data-theme`/`data-crt`
+    // on <html> before React hydrates, so the DOM intentionally differs from the
+    // server payload. `suppressHydrationWarning` accepts the DOM for this
+    // element instead of erroring (Next.js: preventing-flash-before-hydration).
+    <html
+      lang="en"
+      className={`${fontMono.variable} ${fontSans.variable}`}
+      suppressHydrationWarning
+    >
       <body>
         <ThemeInitScript />
         <SkipToContent />
