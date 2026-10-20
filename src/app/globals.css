@@ -1,0 +1,25 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html { background: #09181B; color-scheme: dark; scroll-behavior: smooth; }
+  body { @apply bg-transparent font-sans text-ink antialiased; }
+  ::selection { background: #FF7A65; color: #09181B; }
+  :focus-visible { outline: 2px solid #FF7A65; outline-offset: 2px; }
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    *, *::before, *::after { animation: none !important; transition: none !important; }
+  }
+}
+
+/* Dot-matrix background (rendered by <DotMatrix/>) */
+.dot-matrix {
+  position: fixed; inset: 0; z-index: -1; pointer-events: none;
+  background-color: #09181B;
+  background-image: radial-gradient(circle at center, #2A4A50 1px, transparent 1.4px);
+  background-size: 24px 24px;
+  background-position: 12px 12px;
+  -webkit-mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, #000 35%, rgba(0,0,0,.35) 75%, rgba(0,0,0,.18) 100%);
+          mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, #000 35%, rgba(0,0,0,.35) 75%, rgba(0,0,0,.18) 100%);
+}
