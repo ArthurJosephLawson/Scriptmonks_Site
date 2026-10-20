@@ -228,3 +228,34 @@ pnpm verify → VERIFY_EXIT=0 (sync-screenshots 0 synced, 6/6 brand PNGs OK,
 - SPEC_V5.md (created, spec as supplied), docs/PROGRESS.md (this entry).
 
 - `TODO(OWNER)`: full `SPEC_V3.md`; `@monk_mango` public confirm; portfolio year/client placeholders; 5 lab entries facts; decide splash vs cold perf (V4-3).
+
+## V5-1 — navbar diagnose & fix (2026-10-20)
+
+**Status: DONE.** Commit after `883757a`.
+
+- Diagnose first (SPEC_V5 §7.1): `scripts/check-header.mjs` ran against the old navbar —
+  8 defects logged in `docs/LAYOUT_AUDIT.md` (H-01…H-09) with screenshots
+  `docs/audit/header-before/`. Confirmed: wrap/overflow at 768 (bar 118 px, CTA clipped),
+  no CTA below 1024, inconsistent height, no MORE dropdown, weak dropdown behavior,
+  inline mobile panel (no sheet/lock/trap), no active states.
+- Fix: `navbar.tsx` rewritten per §7.2–§7.6 — sticky `h-16` bar, three zones, nav gated at
+  `lg` (1024), `WORK ▾` + `MORE ▾` hover-intent (120 ms) + click dropdowns with
+  collision-aware left/right open, arrow keys, Esc, outside-click, close-on-route-change;
+  right zone: palette (label ≥1280, icon-only below), `ThemeSwitcher compact`, `[ ORDER ]`
+  CTA at every width, hamburger `<lg`; mobile sheet: `100dvh − --header-h`, internal scroll +
+  `overscroll-behavior: contain`, body scroll lock, `inert` page content, focus trap,
+  48 px items, `NAVIGATE/WORK/TOOLS/FOLLOW` groups, pinned `[ ORDER PROJECT ]` with
+  `env(safe-area-inset-bottom)`; `aria-current` + accent underline, home scroll-spy
+  (IntersectionObserver). `globals.css`: `--header-h`, `scroll-padding-top` var, `.mobile-sheet`
+  with `100vh`→`100dvh` fallback. `theme-switcher.tsx`: `compact` prop (swatch-only).
+- Evidence: `node scripts/check-header.mjs … after` → OK, zero defects at 320–2560 +
+  iPhone 14 + Pixel 7 (bar h=64 everywhere); `node scripts/check-nav-behavior.mjs` → 16/16 PASS.
+  Screenshots before/after committed under `docs/audit/`.
+- Gates: lint 0, typecheck 0, test 71/71, build 0 (prebuild brand+confidentiality checks passed).
+- Ruling: `ARCADE`, `UPDATES`, `INFO` nav links omitted until their routes exist (D6/E1/V5-7)
+  — spec §7.3 lists them, but shipping links to known 404s is a user-visible defect; the
+  breakpoint structure makes adding them one line each later. Cost if wrong: brief interim menu.
+- Ruling: XP pill omitted until the XP system (D2, blocked on SPEC_V3 §6) exists. Cost if wrong: none (additive).
+- Ruling: `react-hooks/set-state-in-effect` avoided by React's render-phase state adjustment
+  for route-change closes and derived `pathname === "/" && …` for scroll-spy (no lint disables needed).
+- `TODO(OWNER)`: none new.

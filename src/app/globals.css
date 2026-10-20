@@ -15,6 +15,7 @@
     --ar: 255; --ag: 122; --ab: 101; --dr: 200; --dg: 91; --db: 75;
     --accent-coral: var(--ar) var(--ag) var(--ab);
     --accent-coral-dim: var(--dr) var(--dg) var(--db);
+    --header-h: 4rem;
     transition: --ar .45s ease, --ag .45s ease, --ab .45s ease,
                 --dr .45s ease, --dg .45s ease, --db .45s ease;
   }
@@ -23,7 +24,7 @@
   :root[data-theme="rose"]   { --ar: 251; --ag: 113; --ab: 133; --dr: 210; --dg: 80;  --db: 100; }
   :root[data-theme="violet"] { --ar: 167; --ag: 139; --ab: 250; --dr: 130; --dg: 105; --db: 210; }
 
-  html { background: #09181B; color-scheme: dark; scroll-behavior: smooth; scroll-padding-top: 5rem; }
+  html { background: #09181B; color-scheme: dark; scroll-behavior: smooth; scroll-padding-top: var(--header-h); }
   body { @apply bg-transparent font-sans text-ink antialiased; }
   ::selection { background: rgb(var(--accent-coral)); color: #09181B; }
   :focus-visible { outline: 2px solid rgb(var(--accent-coral)); outline-offset: 2px; }
@@ -121,4 +122,10 @@
   background-position: 12px 12px;
   -webkit-mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, #000 35%, rgba(0,0,0,.35) 75%, rgba(0,0,0,.18) 100%);
           mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, #000 35%, rgba(0,0,0,.35) 75%, rgba(0,0,0,.18) 100%);
+}
+
+/* Mobile nav sheet: fills the viewport below the header (SPEC_V5 §7.5). */
+.mobile-sheet {
+  height: calc(100vh - var(--header-h));
+  height: calc(100dvh - var(--header-h));
 }

@@ -19,7 +19,7 @@ function reducedMotion(): boolean {
  * Desktop hover/focus previews live; a commit persists. Preview is disabled
  * under reduced motion (commit only).
  */
-export function ThemeSwitcher() {
+export function ThemeSwitcher({ compact = false }: { compact?: boolean }) {
   const { settings, setTheme, previewTheme, toggleCrt } = useTheme();
   const [open, setOpen] = React.useState(false);
   const [activeIndex, setActiveIndex] = React.useState(() =>
@@ -115,7 +115,7 @@ export function ThemeSwitcher() {
           className="size-2.5 rounded-none"
           style={{ backgroundColor: `rgb(${active.accent})` }}
         />
-        [ THEME ]
+        {compact ? null : "[ THEME ]"}
       </button>
 
       {open ? (
