@@ -359,3 +359,51 @@ Next 16 blocks dev-only endpoints (HMR WebSocket, flight prefetch) for origins o
 not mount there either, so this was not introduced by V5-2.
 
 - `TODO(OWNER)`: none new.
+
+## Follow-up fix — hydration warning on `<html>` (2026-10-20, commit `2b26ec3`)
+
+The owner pasted a React hydration warning: the server emitted `<html lang="en" class="...">`
+and the client's first render had `data-theme="coral"` (their stored theme) on the same element,
+so React logged a mismatch on every page for any user with a non-default theme.
+
+Cause: `ThemeInitScript` (`THEME_INIT_SCRIPT` in `src/lib/theme.ts`) intentionally writes
+`data-theme` and `data-crt` onto `<html>` before paint, so the DOM differs from the server
+payload by design. Next's own `preventing-flash-before-hydration` guide documents
+`suppressHydrationWarning` as the remedy for exactly this case.
+
+Fix: `suppressHydrationWarning` on `<html>` in `src/app/layout.tsx`, with a comment recording
+why. The attributes are still applied pre-paint, so there is no theme flash — the flag only
+tells React to accept the DOM for that element instead of warning.
+
+Reproduction and verification (stored theme `violet`, then `amber` + CRT on), one page at a
+time over `/`, `/work`, `/contact`, `/nope-nope` and `/error/403`: **0** hydration warnings
+after the fix. Reverting the single line reproduced exactly **1** warning per page, which
+proves causation rather than coincidence.
+
+Gates after the fix: lint 0, typecheck 0, test 101/101, build 0.
+
+### Git repository corruption and recovery (same interruption)
+
+The interrupted session left `.git` damaged, which blocked the commit above for a while. No
+work was lost. Recorded here so the recovery is auditable:
+
+- **Damage.** Seven loose object files were **zero-length**, all with mtime `2026-10-20 21:47:30`
+  — the objects git was flushing when the process died. Object files are created empty and
+  filled in, so a kill in that window leaves exactly this.
+- **Torn worktree HEAD.** `.git/worktrees/web2/HEAD` contained the literal text
+  `5c3a3057...` — the name of one of the empty objects, not a commit. `git status`, `git log`
+  and `git fsck` all aborted on it.
+- **V5-2 was never lost.** `.git/worktrees/web2/logs/HEAD` reflog showed
+  `27f2a69 -> 490d0c2 commit: V5-2: ...`, and `490d0c2` was present and intact as a 1014-byte
+  loose object whose full tree walked cleanly. Only the branch ref had not been advanced yet.
+- **What was done.** (1) Full `.git` backup to
+  `/tmp/opencode/git-backup/Web.git.20261020-215257` (2.9M). (2) Confirmed none of the seven
+  empty objects were reachable from `490d0c2`'s tree, then deleted them. (3) Rewrote the torn
+  worktree `HEAD` back to `ref: refs/heads/main`. (4) `git update-ref` fast-forwarded `main`
+  from `27f2a69` to `490d0c2` — the reflog proves the ancestry, so this was a fast-forward, not
+  a history rewrite. (5) Rebuilt the worktree index, whose `cache-tree` referenced a deleted
+  empty object, via `git reset --mixed`.
+- **After recovery.** `git fsck` is clean apart from a single `dangling commit 3ad65bf`, a
+  pre-existing V5-2 `stash create` WIP commit unrelated to `main` — harmless, and left in place
+  deliberately. Working tree files were never affected at any point.
+- `TODO(OWNER)`: none new.
