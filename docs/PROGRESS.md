@@ -181,3 +181,50 @@ Warm load (same session, splash already seen) — `scripts/measure-warm-lh.mjs`:
 - `scripts/check-theme-transition.mjs` (V4-2) — mid-transition accent proof.
 
 - `TODO(OWNER)`: decide (a) keep splash and accept cold perf, or (b) authorise a non-covering splash variant.
+
+## V5-0 — master checklist audit (2026-10-20)
+
+**Status: AUDIT DONE. 2 blockers stop full completion of MISSING rows (see below).**
+
+### Gates (real output, this session)
+```
+LINT_EXIT=0
+TYPECHECK_EXIT=0
+TEST_EXIT=0      Test Files 9 passed (9), Tests 71 passed (71)
+BUILD_EXIT=0     27/27 static pages, routes: / /about /contact /faq /order
+                 /privacy /process /work (+10 SSG slugs) /api/contact /api/order
+                 /robots.txt /sitemap.xml
+pnpm verify → VERIFY_EXIT=0 (sync-screenshots 0 synced, 6/6 brand PNGs OK,
+              confidentiality-check: OK, brand-check: OK 113 files, 0 violations)
+```
+
+### Status table (evidence per row — full detail in session report)
+| Group | Row | Status |
+|---|---|---|
+| A | A1 A2 A3 A4 A5 | DONE |
+| B | B1 B2 B3 | DONE |
+| C | C1 PARTIAL (Wolf release tag hard-coded v0.4.0, SPEC_V5 §0 forbids) |
+| C | C2 PARTIAL (4 client ✓, 3/8 lab entries; placeholder switch ✓) |
+| C | C3 DONE |
+| C | C4 PARTIAL (7/8 pages; /terms MISSING) |
+| C | C5 PARTIAL (budgets/email-only/mailto/honeypot ✓; consent checkbox, cash/50-50 order copy, lazy Resend, time-trap missing) |
+| C | C6 MISSING — blocked: SPEC_V3.md truncated, §5 legal text absent; src/data/legal.ts absent |
+| C | C7 MISSING (V4 §5 text available) |
+| D | D1 PARTIAL (palette/toast/progress/back-to-top/copy-email ✓; GitHub stats: src/lib/github.ts imported nowhere) |
+| D | D2 MISSING (no XP/rank/achievement/Codex code; V3 §6.1 spec text absent) |
+| D | D3 PARTIAL (status typewriter + 404 terminal ✓; interactive terminal commands, DeployMonk explorer, Wolf tour absent; V3 §6.2 absent) |
+| D | D4 DONE (V4-2) | D5 DONE (V4-3) |
+| D | D6 MISSING (/arcade route absent — orphan loading.tsx; V3 §6.3 absent, V4 §7 available) |
+| E | E1 MISSING (no /updates, /api/updates, supabase/, src/lib/updates/; V4 §6 text available) |
+| F | F1 DONE (confidentiality-check OK) |
+| F | F2 PARTIAL (.env.example ✓, build green; DEPLOY.md MISSING — V4 §8 text available) |
+| F | F3 PARTIAL (PROGRESS ✓; docs/MODERATION.md MISSING — V4 §6.10 available) |
+
+### Blockers — reported to owner
+1. **SPEC_V3.md truncated** (line 71 `[...full spec continues...]`, line 118 `[...rest as needed...]`): §4 order copy, §5 legal text, §6 gamification/terminal/games, §7 portfolio, §8 hosting are absent. Blocks C6 (exact legal text — SPEC_V5 §0: never recreate from memory), D2, D3, D6 core rules, C5 copy, C2 lab count. Owner must supply full SPEC_V3.md or authorize V4/V5-text-only builds where possible.
+2. Rows buildable from existing SPEC_V4/V5 text now: C7, E1, F2, F3, D1 (github wiring), C1 (version from GitHub API), C2 (5 more lab entries need owner-approved facts), C4 (/terms blocked on legal text).
+
+### Files changed
+- SPEC_V5.md (created, spec as supplied), docs/PROGRESS.md (this entry).
+
+- `TODO(OWNER)`: full `SPEC_V3.md`; `@monk_mango` public confirm; portfolio year/client placeholders; 5 lab entries facts; decide splash vs cold perf (V4-3).
