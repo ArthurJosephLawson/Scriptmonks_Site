@@ -375,12 +375,28 @@ Fix: `suppressHydrationWarning` on `<html>` in `src/app/layout.tsx`, with a comm
 why. The attributes are still applied pre-paint, so there is no theme flash — the flag only
 tells React to accept the DOM for that element instead of warning.
 
-Reproduction and verification (stored theme `violet`, then `amber` + CRT on), one page at a
-time over `/`, `/work`, `/contact`, `/nope-nope` and `/error/403`: **0** hydration warnings
-after the fix. Reverting the single line reproduced exactly **1** warning per page, which
-proves causation rather than coincidence.
+Reproduction and verification. The store holds one JSON key, `sm_settings_v1`
+(`{ theme, crt }` — `src/lib/theme.ts`), so the probe seeds that key before any page script
+runs and then reads back `data-theme`/`data-crt` to confirm the preset actually took effect
+(an earlier version of the probe wrote the wrong key, silently stayed on the default `coral`
+theme, and so proved nothing — the read-back is what caught it).
 
-Gates after the fix: lint 0, typecheck 0, test 101/101, build 0.
+React reports this mismatch in **development only**; a production build logs nothing even
+with the bug present, which was verified directly (`<html lang class>` from the server vs
+`<html lang class data-theme="violet">` on the client, no message). So the evidence is dev-mode:
+
+- With the fix in place, `next dev` over `/`, `/work`, `/contact`, `/nope-nope` and
+  `/error/403`, with stored theme `violet` (CRT off) and again with `amber` (CRT on):
+  **0** hydration messages across 10 page loads.
+- Control: deleting the single `suppressHydrationWarning` line reproduced exactly **1**
+  `console:error` per theme (`A tree hydrated but some attributes of the server rendered HTML
+  didn't match...`). Restoring the line returned it to 0. That is the causation proof.
+- Production re-check with the fix in place: 0 console messages of any kind on the same routes.
+
+The attributes are still applied pre-paint, so there is no theme flash — the flag only tells
+React to accept the DOM for that element instead of warning.
+
+Gates after the fix: lint 0, typecheck 0, test 101/101, build 0, verify 0.
 
 ### Git repository corruption and recovery (same interruption)
 
