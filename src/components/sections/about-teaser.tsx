@@ -4,7 +4,7 @@ import { siteConfig } from "@/data/site";
 
 export function AboutTeaser() {
   return (
-    <section id="about" className="border-b border-dark-border">
+    <section id="about" className="defer-render border-b border-dark-border">
       <div className="mx-auto max-w-content px-6 py-24">
         <SectionLabel>04_ABOUT</SectionLabel>
         <h2 className="mt-2 text-3xl font-bold tracking-tight text-ink md:text-4xl">

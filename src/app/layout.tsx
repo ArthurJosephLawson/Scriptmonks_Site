@@ -1,14 +1,15 @@
-import { BootSplash } from "@/components/boot-splash";
 import type { Metadata } from "next";
 import { JetBrains_Mono, Manrope } from "next/font/google";
 import { DotMatrix } from "@/components/layout/dot-matrix";
 import { Footer } from "@/components/layout/footer";
+import { LazyChrome } from "@/components/layout/lazy-chrome";
 import { Navbar } from "@/components/layout/navbar";
-import { CommandPaletteProvider } from "@/components/layout/command-palette-provider";
+import { NavProgress } from "@/components/layout/nav-progress";
+import { FocusOnRouteChange } from "@/components/layout/focus-on-route-change";
+import { SkipToContent } from "@/components/layout/skip-to-content";
 import { ThemeProvider } from "@/components/layout/theme-provider";
 import { ThemeInitScript } from "@/components/layout/theme-init-script";
 import { ToastProvider } from "@/components/toast/toast-provider";
-import { ScrollProgress } from "@/components/layout/scroll-progress";
 import { siteConfig } from "@/data/site";
 import "./globals.css";
 
@@ -60,17 +61,18 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     <html lang="en" className={`${fontMono.variable} ${fontSans.variable}`}>
       <body>
         <ThemeInitScript />
-        <BootSplash />
+        <SkipToContent />
+        <FocusOnRouteChange />
         <ThemeProvider>
-          <CommandPaletteProvider>
-            <ToastProvider>
-              <ScrollProgress />
+          <ToastProvider>
+            <LazyChrome>
+              <NavProgress />
               <DotMatrix />
               <Navbar />
-              {children}
+              <div id="main-content">{children}</div>
               <Footer />
-            </ToastProvider>
-          </CommandPaletteProvider>
+            </LazyChrome>
+          </ToastProvider>
         </ThemeProvider>
       </body>
     </html>

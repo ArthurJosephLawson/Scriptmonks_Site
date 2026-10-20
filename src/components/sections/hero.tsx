@@ -1,4 +1,3 @@
-import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { AVAILABILITY_LABELS, siteConfig } from "@/data/site";
 import { projects } from "@/data/portfolio";
@@ -26,13 +25,10 @@ export function Hero() {
 
   return (
     <section className="relative border-b border-dark-border">
-      <Image
-        src="/brand/logo-mark.png"
-        alt=""
+      {/* Accent-following brand watermark (SPEC_V4 §3.1) — CSS mask, no PNG. */}
+      <span
         aria-hidden
-        width={186}
-        height={351}
-        className="pointer-events-none absolute left-6 top-1/2 z-0 hidden h-[min(70vh,480px)] w-auto -translate-y-1/2 opacity-[0.06] md:block"
+        className="brand-mask pointer-events-none absolute left-6 top-1/2 z-0 hidden h-[min(70vh,480px)] w-auto -translate-y-1/2 opacity-[0.06] md:block aspect-[186/351]"
       />
       <div className="relative z-10 mx-auto grid max-w-content gap-12 px-6 py-24 md:grid-cols-2 md:items-center md:py-32">
         <div>

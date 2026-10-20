@@ -10,7 +10,7 @@ const clientEntries = projects.filter((p) => p.kind === "client");
 
 export function Portfolio() {
   return (
-    <section id="work" className="border-b border-dark-border">
+    <section id="work" className="defer-render border-b border-dark-border">
       <div className="mx-auto max-w-content px-6 py-24">
         <SectionLabel>02_WORK</SectionLabel>
         <h2 className="mt-2 text-3xl font-bold tracking-tight text-ink md:text-4xl">

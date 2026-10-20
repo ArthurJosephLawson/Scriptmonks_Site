@@ -4,7 +4,7 @@ import { PROCESS_STAGES } from "@/data/process";
 
 export function ProcessCondensed() {
   return (
-    <section id="process" className="border-b border-dark-border">
+    <section id="process" className="defer-render border-b border-dark-border">
       <div className="mx-auto max-w-content px-6 py-24">
         <SectionLabel>03_PROCESS</SectionLabel>
         <h2 className="mt-2 text-3xl font-bold tracking-tight text-ink md:text-4xl">

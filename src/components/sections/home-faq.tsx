@@ -7,7 +7,7 @@ export function HomeFaq() {
   const items = FAQ_ITEMS.slice(0, 4);
 
   return (
-    <section id="faq" className="border-b border-dark-border">
+    <section id="faq" className="defer-render border-b border-dark-border">
       <div className="mx-auto max-w-content px-6 py-24">
         <SectionLabel>05_FAQ</SectionLabel>
         <h2 className="mt-2 text-3xl font-bold tracking-tight text-ink md:text-4xl">
