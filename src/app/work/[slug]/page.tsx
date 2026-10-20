@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { CommandBlock } from "@/components/ui/command-block";
 import { SectionLabel } from "@/components/layout/section-label";
 import { ScreenshotGallery } from "@/components/work/screenshot-gallery";
+import { WidgetBoundary } from "@/components/error/widget-boundary";
 import { lonewolfScreenshots } from "@/data/screenshots.generated";
 import { projects } from "@/data/portfolio";
 import {
@@ -171,7 +172,9 @@ export default async function CaseStudyPage({ params }: PageProps) {
             Screenshots
           </h2>
           <div className="mt-6">
-            <ScreenshotGallery screenshots={lonewolfScreenshots} />
+            <WidgetBoundary label="screenshot-gallery">
+              <ScreenshotGallery screenshots={lonewolfScreenshots} />
+            </WidgetBoundary>
           </div>
         </section>
       ) : null}

@@ -27,8 +27,3 @@ export interface OrderApiSuccess {
   ok: true;
   ref: string;
 }
-export interface OrderApiError {
-  ok: false;
-  error: string;
-  fieldErrors?: Record<string, string[]>;
-}

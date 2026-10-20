@@ -6,7 +6,8 @@ import { useEffect, useRef, useState, type KeyboardEvent } from "react";
 import { useForm, useWatch } from "react-hook-form";
 import { Progress } from "@/components/ui/progress";
 import { orderPayloadSchema, orderFormSchema, type OrderFormValues } from "@/lib/validation";
-import type { OrderApiError, OrderApiSuccess, ProjectOrderPayload } from "@/types/order";
+import { apiFetch } from "@/lib/errors";
+import type { OrderApiSuccess, ProjectOrderPayload } from "@/types/order";
 import { OrderSuccess } from "@/components/order/order-success";
 import { StepBrief } from "@/components/order/step-brief";
 import { StepBudget } from "@/components/order/step-budget";
@@ -68,18 +69,6 @@ interface Draft {
 
 function isDraftStep(value: unknown): value is 1 | 2 | 3 | 4 | "review" {
   return value === "review" || (typeof value === "number" && value >= 1 && value <= 4);
-}
-
-function parseResponse(data: unknown): OrderApiSuccess | OrderApiError {
-  if (typeof data === "object" && data !== null && "ok" in data) {
-    if (data.ok === true && "ref" in data && typeof data.ref === "string") {
-      return { ok: true, ref: data.ref };
-    }
-    if (data.ok === false && "error" in data && typeof data.error === "string") {
-      return { ok: false, error: data.error };
-    }
-  }
-  return { ok: false, error: "Unexpected server response" };
 }
 
 export function OrderWizard() {
@@ -178,25 +167,19 @@ export function OrderWizard() {
 
     setStatus("submitting");
     setSubmitError("");
-    try {
-      const response = await fetch("/api/order", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(parsed.data satisfies ProjectOrderPayload),
-      });
-      const data: unknown = await response.json();
-      const result = parseResponse(data);
-      if (result.ok) {
-        sessionStorage.removeItem(DRAFT_KEY);
-        setRefId(result.ref);
-        setStep("success");
-        setStatus("idle");
-      } else {
-        setSubmitError(result.error);
-        setStatus("idle");
-      }
-    } catch {
-      setSubmitError("Network error. Please try again.");
+    const result = await apiFetch<OrderApiSuccess>("/api/order", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(parsed.data satisfies ProjectOrderPayload),
+    });
+    if (result.ok && typeof result.data.ref === "string") {
+      sessionStorage.removeItem(DRAFT_KEY);
+      setRefId(result.data.ref);
+      setStep("success");
+      setStatus("idle");
+    } else {
+      // apiFetch never throws: failures arrive as safe, friendly messages.
+      setSubmitError(result.ok ? "Unexpected server response" : result.error.message);
       setStatus("idle");
     }
   }

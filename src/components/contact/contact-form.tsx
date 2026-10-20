@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { contactPayloadSchema } from "@/lib/validation";
+import { apiFetch } from "@/lib/errors";
 import { ContactSuccess } from "@/components/contact/contact-success";
 import type { ContactPayload } from "@/types/contact";
 
@@ -85,22 +86,17 @@ export function ContactForm({ initialKind = "general" }: { initialKind?: "genera
     }
     setStatus("submitting");
     setError("");
-    try {
-      const res = await fetch("/api/contact", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(parsed.data),
-      });
-      const data = await res.json();
-      if (data.ok && data.ref) {
-        setRefId(data.ref);
-        setStatus("idle");
-      } else {
-        setError(data.error || "Transmission failed");
-        setStatus("idle");
-      }
-    } catch {
-      setError("Network error. Please try again.");
+    const result = await apiFetch<{ ok?: boolean; ref?: string }>("/api/contact", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(parsed.data),
+    });
+    if (result.ok && result.data.ok === true && typeof result.data.ref === "string") {
+      setRefId(result.data.ref);
+      setStatus("idle");
+    } else {
+      // apiFetch never throws: failures arrive as safe, friendly messages.
+      setError(result.ok ? "Transmission failed" : result.error.message);
       setStatus("idle");
     }
   }

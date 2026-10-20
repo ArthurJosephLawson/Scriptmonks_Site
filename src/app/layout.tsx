@@ -9,6 +9,7 @@ import { FocusOnRouteChange } from "@/components/layout/focus-on-route-change";
 import { SkipToContent } from "@/components/layout/skip-to-content";
 import { ThemeProvider } from "@/components/layout/theme-provider";
 import { ThemeInitScript } from "@/components/layout/theme-init-script";
+import { OfflineBanner } from "@/components/error/offline-banner";
 import { ToastProvider } from "@/components/toast/toast-provider";
 import { siteConfig } from "@/data/site";
 import "./globals.css";
@@ -72,6 +73,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
               <div id="main-content">{children}</div>
               <Footer />
             </LazyChrome>
+            <OfflineBanner />
           </ToastProvider>
         </ThemeProvider>
       </body>

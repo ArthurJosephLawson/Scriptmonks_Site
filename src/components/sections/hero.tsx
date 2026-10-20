@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import { AVAILABILITY_LABELS, siteConfig } from "@/data/site";
 import { projects } from "@/data/portfolio";
 import { TerminalStatus } from "@/components/sections/terminal-status";
+import { WidgetBoundary } from "@/components/error/widget-boundary";
 import { cn } from "@/lib/utils";
 
 function AvailabilityPill() {
@@ -47,11 +48,13 @@ export function Hero() {
           </div>
         </div>
 
-        <TerminalStatus
-          projectsDelivered={siteConfig.deliveredClientCount}
-          productsShipped={projects.filter((p) => p.kind === "product").length}
-          acceptingOrders={siteConfig.availability !== "closed"}
-        />
+        <WidgetBoundary label="terminal">
+          <TerminalStatus
+            projectsDelivered={siteConfig.deliveredClientCount}
+            productsShipped={projects.filter((p) => p.kind === "product").length}
+            acceptingOrders={siteConfig.availability !== "closed"}
+          />
+        </WidgetBoundary>
       </div>
     </section>
   );

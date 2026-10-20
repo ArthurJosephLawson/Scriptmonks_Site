@@ -66,6 +66,10 @@ describe("POST /api/contact", () => {
     }
     const res = await POST(makeRequest({ ...validGeneral, meta: { ...validGeneral.meta, startedAt } }, ip));
     expect(res.status).toBe(429);
+    expect(res.headers.get("Retry-After")).toBeTruthy();
+    const body = (await res.json()) as { ok: boolean; code: string };
+    expect(body.ok).toBe(false);
+    expect(body.code).toBe("RATE_LIMIT");
     expect(deliverContactMessage).toHaveBeenCalledTimes(5);
   });
 

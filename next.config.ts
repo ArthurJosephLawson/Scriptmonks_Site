@@ -6,6 +6,10 @@ const nextConfig: NextConfig = {
   cacheComponents: false,
   partialPrefetching: false,
   devIndicators: false,
+  // Next 16 blocks dev-only endpoints (HMR WebSocket, flight prefetch) for
+  // origins other than `localhost`. Without this, a dev server reached at
+  // 127.0.0.1 silently stalls hydration.
+  allowedDevOrigins: ["127.0.0.1"],
   async headers() {
     return [
       {

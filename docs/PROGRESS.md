@@ -259,3 +259,103 @@ pnpm verify → VERIFY_EXIT=0 (sync-screenshots 0 synced, 6/6 brand PNGs OK,
 - Ruling: `react-hooks/set-state-in-effect` avoided by React's render-phase state adjustment
   for route-change closes and derived `pathname === "/" && …` for scroll-spy (no lint disables needed).
 - `TODO(OWNER)`: none new.
+
+## V5-2 — error pages & error handling (2026-10-20)
+
+**Status: DONE.** SPEC_V5 §2. Commit after `27f2a69`.
+
+### Delivered
+- `src/lib/errors.ts` — 17-code `ErrorCode` union, `ERROR_MESSAGES` map, `ApiError`
+  interface, `statusForCode`/`codeForStatus`, `isErrorCode`, `isApiError`, `apiError`,
+  `toApiError(input, fallback)`, `apiErrorResponse(code, init)`, `logServerError(route, error)`,
+  and `apiFetch<T>()` (10 s AbortController timeout, `NETWORK`/`TIMEOUT` mapping, one retry
+  for idempotent GETs, never throws raw).
+- `src/components/error/error-view.tsx` — shared terminal-style card: `// SYSTEM`, mono
+  status line `[ <code> ] <TITLE>`, message, optional `Reference: <id>`, dev-only
+  collapsible `[ DETAILS ]`, then `primary` → `[ GO HOME ]` → `actions` → `[ EMAIL US ]`.
+  Mailto body carries only the page path and reference id.
+- `src/components/error/offline-banner.tsx` — global `You're offline` / `Check your
+  connection. Your form data is kept.`; auto-hides on `online`.
+- `src/components/error/widget-boundary.tsx` — class boundary rendering
+  `[ ! ] This part failed to load. [ RETRY ]`; wrapped around `TerminalStatus` (hero) and
+  `ScreenshotGallery` (work detail).
+- `src/app/not-found.tsx` — ErrorView 404 copy + the V4 mini-terminal kept; actions
+  `[ VIEW WORK ]` `[ PLAY ARCADE ]`.
+- `src/app/error.tsx` (segment 500) — `Reference: <digest>`, `[ TRY AGAIN ]` via `retry`,
+  dev-only `[ DETAILS ]`; logs `[segment-error] <path> digest=<id>` only.
+- `src/app/global-error.tsx` (root 500) — own `<html>`/`<body>`, inline hex of site
+  tokens (no stylesheet is available here), `[ RELOAD ]`.
+- `src/app/error/{403,429,503}/page.tsx` — exact copy from §2.1, `robots: noindex`.
+- `src/app/dev/force-error/` — dev-only route (404 in production) that throws from a
+  client effect so `app/error.tsx` mounts; a server throw would be caught by Next's own
+  error document instead.
+- Both API routes now emit the §2.2 `ApiError` contract via `apiErrorResponse`; both
+  clients (`order-wizard`, `contact-form`) use `apiFetch`.
+- `scripts/check-error-pages.mjs` — Playwright e2e for the 404, the 500 (dev), the three
+  static error pages, the 415 API contract, and the 405 status.
+
+### Evidence
+```
+pnpm lint      → exit 0
+pnpm typecheck → exit 0
+pnpm test      → 11 files, 101 passed (was 71)
+pnpm build     → exit 0
+pnpm verify    → exit 0 (sync 0, 6/6 PNGs OK, confidentiality OK, brand 126 files 0 violations)
+BASE_URL=… node scripts/check-error-pages.mjs
+  dev  server (next dev, port 3201) → 36/36 checks passed
+  prod server (next start, port 3199) → 27/27 checks passed (dev-only 500 checks skipped)
+```
+
+### Rulings (each logged with the spec tension it resolves)
+1. **`reset` → `retry`.** SPEC_V5 §2.1 says `[ TRY AGAIN ]` "calls `reset`". Next 16.4.2
+   `error.tsx` receives `retry` (stable since 16.3, documented in
+   `dist/docs/01-app/03-api-reference/03-file-conventions/error.md`); `reset` still exists
+   but §2.1's intent is "re-fetch and re-render the segment", which is exactly `retry`.
+2. **`fieldErrors` kept.** The §2.2 `ApiError` type has no `fieldErrors`, but removing it
+   would break the existing per-field form errors (V2/V3 requirement, and the route tests
+   assert it). Implemented as an optional extra field on `ApiError`.
+3. **Status remaps** where the spec table and the code list disagree: non-JSON content type
+   → 415 `UNSUPPORTED` (was 400); invalid JSON → 400 `INVALID` with message override
+   `"That request couldn't be read. Please try again."`; delivery failure → 500 `SERVER`
+   with message override `"Delivery failed. Please email script.monks.mail@gmail.com"`
+   (the spec has no 502 and requires unknown errors to become `SERVER`); rate limit → 429
+   `RATE_LIMIT` with `retryAfterSeconds` + `Retry-After`.
+4. **`ErrorView` always shows `[ GO HOME ]` + `[ EMAIL US ]`.** §2.1 "Always includes" wins
+   over the per-row action column, which omits them for some rows. Two slots (`primary`
+   before GO HOME, `actions` between GO HOME and EMAIL US) reproduce the table's ordering.
+5. **405 cannot carry `Allow`.** The spec asks for "405 with `Allow`". In Next 16 an
+   unexported method on a route handler yields a framework-level 405 with no `Allow` header,
+   and a route handler cannot add one for a method it does not export. `METHOD` stays in the
+   code map; the e2e script reports the missing header as a documented limitation instead of
+   asserting it.
+6. **`/error/*` pages return HTTP 200.** Next's App Router has no page-level status-code
+   API; the spec hedges with "where Next.js allows". They are `noindex`.
+7. **404's `[ PLAY ARCADE ]` targets `/arcade`, which does not exist yet** (D6 is blocked on
+   the truncated SPEC_V3). The click is dead until D6 lands and logs a route 404.
+8. **`WidgetBoundary` coverage.** Only the widgets that exist today are wrapped
+   (`TerminalStatus`, `ScreenshotGallery`). §2.3 also lists games, updates list, GitHub
+   stats and Codex — those widgets do not exist yet and must be wrapped when built.
+9. **`/moderate/[token]`.** `ErrorView` supports the exact copy via props; the route itself
+   is deferred because no moderation feature exists.
+10. **`[ DETAILS ]` shows `error.message` only.** §2.1 says "In development only, add a
+    collapsible `[ DETAILS ]` block" and names only `error.message`; no stack or file paths
+    are passed in.
+
+### Root-cause finding fixed in this task: every page shipped an empty body
+`LazyChrome` rendered `{children}` **inside** `next/dynamic(..., { ssr: false })` components.
+`ssr: false` bails its whole subtree out of server rendering, so the entire page — not just
+the chrome — came back as client-only and the SSR HTML was an empty body (content appeared
+only after hydration). Fix in `src/components/layout/lazy-chrome.tsx`: `{children}` renders
+first and each `ssr: false` import is a **sibling** behind its own `<Suspense fallback={null}>`.
+`next.config.ts` was left at the Next 16 default (`reactBrowserBailout: true`) — verified
+with `curl` that `/error/403`, `/`, `/work`, `/contact` and an unknown route all now return
+real server-rendered markup. This was a site-wide defect, not an error-page one.
+
+### Also fixed: dev server at `127.0.0.1` never hydrated
+Next 16 blocks dev-only endpoints (HMR WebSocket, flight prefetch) for origins other than
+`localhost`, and that stall is invisible unless you read the dev-server log. Added
+`allowedDevOrigins: ["127.0.0.1"]` to `next.config.ts`, which removes the warning and lets
+`[HMR] connected` appear. Verified pre-existing on the V5-1 baseline: the command palette did
+not mount there either, so this was not introduced by V5-2.
+
+- `TODO(OWNER)`: none new.

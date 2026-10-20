@@ -72,15 +72,22 @@ describe("POST /api/order spam checks", () => {
     expect(deliverOrder).toHaveBeenCalledOnce();
   });
 
-  it("invalid payload: 400 with fieldErrors", async () => {
+  it("invalid payload: 400 INVALID with fieldErrors", async () => {
     const res = await POST(makeRequest({ scope: {} }, freshIp()));
     expect(res.status).toBe(400);
-    const body = (await res.json()) as { ok: boolean; error: string };
+    const body = (await res.json()) as {
+      ok: boolean;
+      code: string;
+      message: string;
+      fieldErrors?: Record<string, string[]>;
+    };
     expect(body.ok).toBe(false);
-    expect(body.error).toBe("Validation failed");
+    expect(body.code).toBe("INVALID");
+    expect(typeof body.message).toBe("string");
+    expect(body.fieldErrors).toBeTruthy();
   });
 
-  it("non-JSON content type: 400", async () => {
+  it("non-JSON content type: 415 UNSUPPORTED", async () => {
     const res = await POST(
       new Request("http://localhost/api/order", {
         method: "POST",
@@ -88,7 +95,9 @@ describe("POST /api/order spam checks", () => {
         body: "hello",
       }),
     );
-    expect(res.status).toBe(400);
+    expect(res.status).toBe(415);
+    const body = (await res.json()) as { ok: boolean; code: string };
+    expect(body.code).toBe("UNSUPPORTED");
   });
 
   it("rate limit: 6th request from same IP gets 429 with Retry-After", async () => {
@@ -102,21 +111,28 @@ describe("POST /api/order spam checks", () => {
       statuses.push(res.status);
       if (res.status === 429) {
         expect(res.headers.get("Retry-After")).toBeTruthy();
+        const body = (await res.json()) as {
+          code: string;
+          retryAfterSeconds?: number;
+        };
+        expect(body.code).toBe("RATE_LIMIT");
+        expect(typeof body.retryAfterSeconds).toBe("number");
       }
     }
     expect(statuses.slice(0, 5)).toEqual([200, 200, 200, 200, 200]);
     expect(statuses[5]).toBe(429);
   });
 
-  it("delivery failure: 502", async () => {
+  it("delivery failure: 500 SERVER with mailto fallback copy", async () => {
     deliverOrder.mockRejectedValueOnce(new Error("All delivery channels failed"));
     const startedAt = Date.now() - 10_000;
     const res = await POST(
       makeRequest({ ...validPayload, meta: { ...validPayload.meta, startedAt } }, freshIp()),
     );
-    expect(res.status).toBe(502);
-    const body = (await res.json()) as { ok: boolean; error: string };
+    expect(res.status).toBe(500);
+    const body = (await res.json()) as { ok: boolean; code: string; message: string };
     expect(body.ok).toBe(false);
-    expect(body.error).toMatch(/email/i);
+    expect(body.code).toBe("SERVER");
+    expect(body.message).toMatch(/email/i);
   });
 });
