@@ -12,6 +12,7 @@
     "sync:screenshots": "node scripts/sync-screenshots.mjs",
     "brand:check": "node scripts/brand-check.mjs",
     "verify": "node scripts/sync-screenshots.mjs && node scripts/check-brand.mjs && node scripts/confidentiality-check.mjs && node scripts/brand-check.mjs",
+    "check:e2e": "node scripts/check-error-pages.mjs && node scripts/check-nav-behavior.mjs",
     "predev": "node scripts/sync-screenshots.mjs",
     "prebuild": "node scripts/sync-screenshots.mjs && node scripts/confidentiality-check.mjs && node scripts/brand-check.mjs"
   },

@@ -423,3 +423,98 @@ work was lost. Recorded here so the recovery is auditable:
   pre-existing V5-2 `stash create` WIP commit unrelated to `main` — harmless, and left in place
   deliberately. Working tree files were never affected at any point.
 - `TODO(OWNER)`: none new.
+
+## V5-3 — dead routes/links, version-free release, canonical legal pages (2026-10-21)
+
+**Status: DONE.** Commit `a2cabbf`. Owner decisions taken before the work: fix errors +
+cleanup + docs + hosting; remove the dead links; treat `DOCCUMENTS/` as canonical for
+legal text.
+
+### Defects found (evidence-based)
+
+| # | Defect | Evidence |
+|---|---|---|
+| 1 | Dead link to `/arcade` | `src/app/not-found.tsx`, `not-found-terminal.tsx`, `error-view.test.tsx`; no `/arcade` route in the `next build` table |
+| 2 | Dead link to `/info` | `navbar.tsx` MORE-menu `active` check; no `/info` route |
+| 3 | Orphan `loading.tsx` dirs | `src/app/arcade/loading.tsx`, `src/app/updates/loading.tsx` with no `page.tsx`; route absent from the build table |
+| 4 | Dead module | `src/lib/github.ts` exported `getRepoStats`, imported nowhere |
+| 5 | Hard-coded Wolf version | `portfolio.ts` pinned `releases/tag/v0.4.0` — a direct SPEC_V5 §0 violation |
+| 6 | Copy typo | `about/page.tsx`: "client client work" |
+| 7 | Missing `/terms` | SPEC_V4 §6.9; route absent |
+
+### Delivered
+
+- Removed every `/arcade` and `/info` link (404 page actions, 404 terminal commands +
+  placeholder + help text, navbar `active` check). No user-visible 404s remain.
+- Deleted the orphan `src/app/arcade/` and `src/app/updates/` directories (recoverable
+  from git when those routes are built).
+- `src/lib/github.ts` is no longer dead: `src/app/work/[slug]/page.tsx` calls
+  `getRepoStats()` and renders the release link from the API. The version-free
+  `/releases` page is the fallback, so no version is ever hard-coded.
+- `portfolio.ts`: `releases` replaces `release`; `githubRepo` added to the type. A test
+  now asserts no `vX.Y.Z` string appears in the Wolf entry.
+- `src/data/legal.ts` + `src/components/legal/legal-page.tsx` + `/terms`; `/privacy`
+  rewritten to render the canonical policy. Both pages read from data, never JSX.
+- Fixed the about-page typo.
+
+### Firewall conflict and its resolution (recorded in `docs/LEGAL.md`)
+
+The canonical legal text contains content the owner-mandated confidentiality firewall
+(`SPEC_V3.md` §1, `scripts/confidentiality-check.mjs`) forbids publishing: a named
+referral promoter, referral/commission terms, payment account details, operator
+age/guardian language, and Discord. The build failed on these.
+
+Owner ruling: **redact the public edition.** Kept every other clause verbatim (brand
+name substituted); replaced each withheld clause with an explicit `TODO(OWNER)` marker
+in sections 4.2 and 4.4, and generalised section 1.1. No clause was invented, none was
+silently dropped, and the firewall was not weakened.
+
+### Gates (real output)
+
+```
+LINT=0
+TSC=0
+TEST=0      Test Files 11 passed (11), Tests 102 passed (102)
+BUILD=0     route table now includes /terms
+VERIFY=0    confidentiality-check: OK, brand-check: OK (127 files, 0 violations)
+```
+
+## V5-4 — hosting readiness and documentation set (2026-10-21)
+
+**Status: DONE (one owner decision pending — see Blocked).**
+
+### Delivered
+
+- `DEPLOY.md` — Vercel (recommended), Cloudflare Workers/Pages, any Node host, and the
+  static/InfinityFree path, plus env-var reference and a post-deploy checklist.
+- `docs/HOSTING.md` — host comparison table and the InfinityFree constraint in short form.
+- `docs/LEGAL.md` — redaction record: what was published, what was withheld, and why.
+- `docs/SOURCE_DOCUMENTS.md` — index of the owner's six `DOCCUMENTS/*.docx` files, which
+  are used, and which public facts they support.
+- `docs/CACHING.md` — per-route strategy verified against the real build table.
+- `docs/SECURITY.md` — implemented measures vs. the planned backlog, honestly split.
+- `README.md` — rewritten (the old file had a duplicated heading and stale commands).
+- `package.json` — added `check:e2e` (the Playwright checks). It is deliberately **not**
+  in `verify`, which must stay offline and deterministic; the e2e checks need a running
+  server.
+
+### The InfinityFree finding
+
+InfinityFree is shared PHP hosting with **no Node.js runtime**, so this Next.js app
+cannot run there as-is. Two API routes (`/api/order`, `/api/contact`) must execute
+server-side to reach Resend, and `next.config.ts` `headers()` is unsupported by a static
+export. Documented as Option A (host on Vercel — recommended) and Option B (static
+export with the forms degraded to the existing mailto fallback). Owner acceptance of
+Option B is required before it is ever used.
+
+### Gates (real output)
+
+```
+LINT=0  TSC=0  TEST=0 (102/102)  BUILD=0  VERIFY=0
+```
+
+### `TODO(OWNER)` raised
+
+1. Accept the boot-splash vs cold-performance trade-off (carried over from V4-3).
+2. Approve or replace the redacted legal wording in sections 4.2 and 4.4.
+3. Confirm Option B (static export) is acceptable if InfinityFree is ever required.

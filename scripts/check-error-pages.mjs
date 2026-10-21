@@ -73,7 +73,7 @@ const isDev = probe.status() !== 404;
   );
   check("404 action GO HOME", html.includes("[ GO HOME ]"));
   check("404 action VIEW WORK", html.includes("[ VIEW WORK ]"));
-  check("404 action PLAY ARCADE", html.includes("[ PLAY ARCADE ]"));
+  check("404 action CONTACT US", html.includes("[ CONTACT US ]"));
   check("404 action EMAIL US", html.includes("[ EMAIL US ]"));
   // The mini-terminal renders the header label and the 404 status line.
   check(
