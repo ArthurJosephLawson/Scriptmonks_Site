@@ -1,6 +1,6 @@
 import type { UseFormReturn } from "react-hook-form";
 import { RadioCard } from "@/components/ui/radio-card";
-import { BUDGET_LABELS, TIMELINE_LABELS, type OrderFormValues } from "@/lib/validation";
+import { BUDGET_LABELS, TIMELINE_LABELS, type OrderFormValues } from "@/types/order";
 import { BUDGETS, TIMELINES } from "@/types/order";
 
 export function StepBudget({ form }: { form: UseFormReturn<OrderFormValues> }) {

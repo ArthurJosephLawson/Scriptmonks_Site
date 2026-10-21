@@ -1,6 +1,6 @@
 import type { UseFormReturn } from "react-hook-form";
 import { RadioCard } from "@/components/ui/radio-card";
-import { PROJECT_TYPE_LABELS, type OrderFormValues } from "@/lib/validation";
+import { PROJECT_TYPE_LABELS, type OrderFormValues } from "@/types/order";
 import { PROJECT_TYPES } from "@/types/order";
 
 const SCOPE_HINTS: Record<(typeof PROJECT_TYPES)[number], string> = {

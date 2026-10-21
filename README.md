@@ -105,5 +105,6 @@ Placeholders are marked `TODO(OWNER)` in code. Current list:
 - `src/data/site.ts` — optional `extraMetric` (5th metrics tile) and
   `availability`.
 - `@monk_mango` — confirm the second Instagram handle is public.
-- Boot-splash vs cold-load performance trade-off (see `docs/PROGRESS.md`, V4-3).
+- ~~Boot-splash vs cold-load performance trade-off~~ — **resolved in V5-5**: the
+  splash is now a non-covering panel, so the hero wins LCP. See `docs/PROGRESS.md`, V5-5.
 - `SPEC_V3.md` is truncated; some historical tasks cannot be verified against it.

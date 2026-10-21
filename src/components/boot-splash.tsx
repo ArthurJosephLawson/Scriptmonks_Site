@@ -3,10 +3,25 @@
 import { useEffect, useState } from "react";
 
 /**
- * Boot splash (SPEC_V4 §3.1 + §4 perf). Decorative, client-only, and never an
- * LCP candidate: the mark is drawn with a CSS mask over the live accent colour
- * (no per-theme PNG, no `<img>`), so it cannot be reported as the largest
- * contentful paint and costs no image bytes on first load.
+ * Boot splash (SPEC_V4 §3.1 + §4 perf, SPEC_V3 §106).
+ *
+ * Behaviour required by SPEC_V3 §106: on the first page load of a browser
+ * session (`sessionStorage` key `sm_boot_v1`) show the coral mark fading in
+ * with the 3 mono lines for at most 1.4 s; any key or click skips it;
+ * `prefers-reduced-motion` skips it entirely; storage access is wrapped in
+ * try/catch.
+ *
+ * NON-COVERING VARIANT (owner decision, V5-5): the spec's "full-screen overlay"
+ * made the splash the Largest Contentful Paint on the cold path, because an
+ * opaque full-viewport layer hides the real hero content and becomes the
+ * largest painted element — measured in V4-3 at 4.7–5.5 s LCP, giving
+ * Performance 47–52 against a ≥90 target. This variant keeps every other
+ * requirement identical but anchors the splash to a contained panel, so the
+ * page underneath paints normally and the hero wins LCP.
+ *
+ * It is client-only and lazy-loaded, so it never enters the server render and
+ * costs no image bytes: the mark is drawn with a CSS mask over the live accent
+ * colour (no per-theme PNG).
  */
 export function BootSplash() {
   const [visible, setVisible] = useState(false);
@@ -47,17 +62,20 @@ export function BootSplash() {
 
   return (
     <div
-      className={`pointer-events-none fixed inset-0 z-[9999] flex flex-col items-center justify-center bg-[#09181B] transition-opacity duration-100 ${hide ? "opacity-0" : "opacity-100"}`}
+      className={`pointer-events-none fixed bottom-6 left-6 z-[9999] hidden w-[min(20rem,calc(100vw-3rem))] border border-dark-border bg-[#09181B] p-4 shadow-brutal-muted transition-opacity duration-100 sm:block ${hide ? "opacity-0" : "opacity-100"}`}
       aria-hidden
+      data-boot-splash
     >
-      <span
-        aria-hidden
-        className="brand-mask block h-24 w-auto aspect-[186/351] animate-fade-in"
-      />
-      <div className="mt-8 space-y-1 text-left font-mono text-xs text-muted-teal">
-        <div className="opacity-90">&gt; booting scriptmønks...</div>
-        <div className="opacity-90">&gt; loading modules [ OK ]</div>
-        <div className="opacity-90">&gt; ready_</div>
+      <div className="flex items-center gap-4">
+        <span
+          aria-hidden
+          className="brand-mask block h-12 w-auto shrink-0 aspect-[186/351] animate-fade-in"
+        />
+        <div className="space-y-1 font-mono text-xs text-muted-teal">
+          <div className="opacity-90">&gt; booting scriptmønks...</div>
+          <div className="opacity-90">&gt; loading modules [ OK ]</div>
+          <div className="opacity-90">&gt; ready_</div>
+        </div>
       </div>
     </div>
   );

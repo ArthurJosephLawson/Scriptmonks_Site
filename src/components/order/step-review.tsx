@@ -6,7 +6,7 @@ import {
   PROJECT_TYPE_LABELS,
   TIMELINE_LABELS,
   type OrderFormValues,
-} from "@/lib/validation";
+} from "@/types/order";
 
 interface StepReviewProps {
   form: UseFormReturn<OrderFormValues>;

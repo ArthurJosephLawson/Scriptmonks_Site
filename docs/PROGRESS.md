@@ -518,3 +518,108 @@ LINT=0  TSC=0  TEST=0 (102/102)  BUILD=0  VERIFY=0
 1. Accept the boot-splash vs cold-performance trade-off (carried over from V4-3).
 2. Approve or replace the redacted legal wording in sections 4.2 and 4.4.
 3. Confirm Option B (static export) is acceptable if InfinityFree is ever required.
+
+## V5-5 — boot splash vs cold performance: owner decision applied (2026-10-21)
+
+**Status: DONE.** Owner chose the "best option" for the V4-3 open question: keep
+the boot splash but make it **non-covering**, so the real page content can win
+Largest Contentful Paint.
+
+### The decision
+
+V4-3 root-caused the cold Performance score (47–52 vs a ≥90 target) using
+Lighthouse's `lcp-breakdown-insight`: the LCP element was the boot-splash text,
+with `elementRenderDelay` 1.2–1.7 s. The cause is structural — SPEC_V3 §106
+specified a **full-screen opaque overlay**, so while it is on screen the real page
+is hidden and the overlay becomes the largest painted element. V4-3 also recorded
+a falsification: shrinking the splash to one line did **not** change the LCP
+element, because the overlay still covered the viewport.
+
+V4-3 offered the owner two options: (a) accept cold ~50 / warm 72 with the cause
+documented, or (b) authorise a non-covering splash variant. **The owner chose (b).**
+
+### What changed
+
+`src/components/boot-splash.tsx` — the splash is now a contained panel
+(`fixed bottom-6 left-6`, `w-[min(20rem,calc(100vw-3rem))]`) instead of
+`fixed inset-0`. Every other §106 requirement is unchanged:
+
+| §106 requirement | Status |
+|---|---|
+| First load of a session only (`sessionStorage` `sm_boot_v1`) | kept |
+| Held at most 1.4 s | kept (measured 1486 ms = 1400 ms hold + 100 ms fade) |
+| Coral mark fading in | kept (CSS accent mask, no PNG) |
+| The 3 mono lines verbatim | kept, verified text |
+| Any key or click skips | kept, verified |
+| `prefers-reduced-motion` skips entirely | kept, verified |
+| `sessionStorage` in try/catch | kept |
+| **Full-screen overlay** | **changed to a contained panel** — this is the §106 clause the owner authorised altering for perf |
+
+Hidden below `sm` so it never covers content on small screens.
+
+### Measured result
+
+New `scripts/check-lcp.mjs` reports the real LCP element on a fresh session:
+
+| | Before (V4-3, Lighthouse) | After (this task, direct probe) |
+|---|---|---|
+| LCP element | boot-splash text (`> booting scriptmønks...`) | navbar wordmark `SPAN` (`scriptmønks_`) — real content |
+| LCP render time | 4.7–5.5 s | 908–1076 ms |
+| `elementRenderDelay` | 1.2–1.7 s | 822 ms |
+| Splash viewport coverage | 100% | **2.5%** (320×90 px of 1280×900) |
+| Splash present / skippable / reduced-motion | — | all verified PASS |
+
+**Honest caveat:** the measured Lighthouse Performance score on this machine
+ranged 46–68 across runs, and LCP 2.3–5.9 s. That spread is localhost CPU
+contention (Lighthouse's 4× simulated CPU throttle on a box also running the
+server and the browser), not run-to-run instability in the site. The stable,
+directly measured signals are the ones above: the LCP element is now real content
+and `elementRenderDelay` fell to 822 ms. Reaching a *reportable* ≥90 still needs a
+quiet measurement environment; it is not claimable from these runs and is not
+claimed here.
+
+### Bonus fix found while investigating: zod was loading on every route
+
+Lighthouse attributed the remaining TBT to `scriptEvaluation`, with two chunks
+99.9% unused on `/`. They were **zod** (144 kB) and **framer-motion** (152 kB) —
+neither used by the home page. Cause: `src/lib/validation.ts` exported runtime
+label maps (`BUDGET_LABELS`, `PROJECT_TYPE_LABELS`, `TIMELINE_LABELS`) alongside
+its zod schemas, and the order step components imported those labels — dragging
+the whole zod runtime into the client graph.
+
+Fix: the label maps and the `OrderFormValues` type now live in the zod-free
+`src/types/order.ts`; `validation.ts` re-exports them for server callers, and a
+compile-time guard asserts the schema's inferred type still matches the
+hand-written one so they cannot drift.
+
+Verified per-route first-load JS (raw):
+
+| route | before | after | zod chunks |
+|---|---|---|---|
+| `/` | 639 kB | **543 kB** | none |
+| `/about` | 633 kB | 596 kB | none |
+| `/work` | 645 kB | 608 kB | none |
+| `/terms` | — | 537 kB | none |
+| `/order` | 924 kB | 828 kB | 2 (used) |
+| `/contact` | 779 kB | 683 kB | 1 (used) |
+
+zod now loads only where it is actually used.
+
+### Gates (real output)
+
+```
+LINT=0  TSC=0  TEST=0 (102/102)  BUILD=0  VERIFY=0
+e2e (production build): error pages 27/27, nav behaviour 16/16, header 0 defects
+splash: present, 3 lines verbatim, 2.5% coverage, key-skip, reduced-motion skip — all PASS
+```
+
+### New script
+
+- `scripts/check-lcp.mjs` — reports the real LCP element and its render time on a
+  fresh session; the evidence tool for this decision.
+
+### `TODO(OWNER)`
+
+- The non-covering splash is a deliberate, owner-authorised amendment to
+  SPEC_V3 §106's "full-screen overlay" wording. If the full-screen overlay must
+  return, cold Performance falls back to ~50 and that trade-off is the owner's.

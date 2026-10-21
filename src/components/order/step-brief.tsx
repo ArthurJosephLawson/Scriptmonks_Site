@@ -2,7 +2,7 @@ import type { UseFormReturn } from "react-hook-form";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import type { OrderFormValues } from "@/lib/validation";
+import type { OrderFormValues } from "@/types/order";
 
 export function StepBrief({ form }: { form: UseFormReturn<OrderFormValues> }) {
   const { errors } = form.formState;

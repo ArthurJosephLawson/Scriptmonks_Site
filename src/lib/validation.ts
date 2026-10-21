@@ -1,12 +1,6 @@
 import { z } from "zod";
-import {
-  BUDGETS,
-  PROJECT_TYPES,
-  TIMELINES,
-  type BudgetRange,
-  type ProjectType,
-  type Timeline,
-} from "../types/order";
+import { BUDGETS, PROJECT_TYPES, TIMELINES } from "../types/order";
+import type { OrderFormValues as TypesOrderFormValues } from "../types/order";
 
 const projectTypeField = z.enum(PROJECT_TYPES, { message: "Select a project type" });
 const budgetField = z.enum(BUDGETS, { message: "Select a budget range" });
@@ -102,6 +96,18 @@ export const orderFormSchema = z.object({
 
 export type OrderFormValues = z.infer<typeof orderFormSchema>;
 
+// Compile-time guard: the hand-written `OrderFormValues` in `src/types/order.ts`
+// (used by client components so they need no zod import) must stay structurally
+// identical to the schema's inferred output. If either side changes, this fails
+// the typecheck.
+type _AssertOrderFormValuesMatch = OrderFormValues extends TypesOrderFormValues
+  ? TypesOrderFormValues extends OrderFormValues
+    ? true
+    : never
+  : never;
+const _assertOrderFormValues: _AssertOrderFormValuesMatch = true;
+void _assertOrderFormValues;
+
 const metaSchema = z.object({
   startedAt: z.number().int().positive(),
   honeypot: z.string(),
@@ -156,25 +162,11 @@ export const contactPayloadSchema = z.object({
 
 // type compatibility checked
 
-export const PROJECT_TYPE_LABELS: Record<ProjectType, string> = {
-  "custom-software": "Custom Software",
-  utility: "Utility",
-  cli: "CLI",
-  "full-app": "Full App",
-};
-
-export const BUDGET_LABELS: Record<BudgetRange, string> = {
-  "under-250": "< NPR 250",
-  "250-1k": "NPR 250 – NPR 1,000",
-  "1k-3k": "NPR 1,000 – NPR 3,000",
-  "3k-10k": "NPR 3,000 – NPR 5,000",
-  "10k-plus": "NPR 5,000+",
-  "not-sure": "Not sure yet",
-};
-
-export const TIMELINE_LABELS: Record<Timeline, string> = {
-  asap: "ASAP (< 2 weeks)",
-  "2-4-weeks": "2 – 4 weeks",
-  "1-2-months": "1 – 2 months",
-  flexible: "Flexible",
-};
+// Labels now live in `src/types/order.ts` (zod-free) so client components can
+// import them without pulling zod into the browser bundle. Re-exported here for
+// existing server-side callers.
+export {
+  BUDGET_LABELS,
+  PROJECT_TYPE_LABELS,
+  TIMELINE_LABELS,
+} from "../types/order";
