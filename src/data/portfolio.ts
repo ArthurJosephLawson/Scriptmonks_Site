@@ -30,9 +30,12 @@ export const allProjects: ProjectEntry[] = [
     ],
     links: {
       repo: "https://github.com/ArthurJosephLawson/Wolf",
-      release:
-        "https://github.com/ArthurJosephLawson/Wolf/releases/tag/v0.4.0",
+      // Version-free: the precise tag is read from the GitHub API at render
+      // time (SPEC_V5 §0 forbids hard-coding Wolf's version). This is the
+      // safe fallback target when the API is unavailable.
+      releases: "https://github.com/ArthurJosephLawson/Wolf/releases",
     },
+    githubRepo: "ArthurJosephLawson/Wolf",
     isPlaceholder: false,
   },
   {
@@ -55,7 +58,9 @@ export const allProjects: ProjectEntry[] = [
     links: {
       npm: "https://www.npmjs.com/package/deploymonk",
       repo: "https://github.com/ArthurJosephLawson/deploymonk",
+      releases: "https://github.com/ArthurJosephLawson/deploymonk/releases",
     },
+    githubRepo: "ArthurJosephLawson/deploymonk",
     install: "npm install -g deploymonk",
     isPlaceholder: false,
   },

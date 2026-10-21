@@ -371,7 +371,7 @@ export function Navbar() {
             [ CONTACT ]
           </Link>
 
-          <NavDropdown id="more-menu" label="MORE" items={MORE_MENU} active={pathname === "/faq" || pathname === "/info"} />
+          <NavDropdown id="more-menu" label="MORE" items={MORE_MENU} active={pathname === "/faq"} />
         </nav>
 
         {/* Right: actions */}

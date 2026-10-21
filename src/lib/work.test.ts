@@ -74,9 +74,15 @@ describe("clientLine", () => {
 });
 
 describe("releaseLabel", () => {
-  it("extracts the tag from the release URL", () => {
+  it("extracts the tag from a tag URL", () => {
     expect(releaseLabel("https://github.com/ArthurJosephLawson/Wolf/releases/tag/v0.4.0")).toBe(
       "[ RELEASE v0.4.0 ]",
+    );
+  });
+
+  it("labels a version-free releases page generically", () => {
+    expect(releaseLabel("https://github.com/ArthurJosephLawson/Wolf/releases")).toBe(
+      "[ LATEST RELEASE ]",
     );
   });
 });

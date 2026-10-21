@@ -9,6 +9,7 @@ import { ScreenshotGallery } from "@/components/work/screenshot-gallery";
 import { WidgetBoundary } from "@/components/error/widget-boundary";
 import { lonewolfScreenshots } from "@/data/screenshots.generated";
 import { projects } from "@/data/portfolio";
+import { getRepoStats } from "@/lib/github";
 import {
   STATUS_LABELS,
   clientLine,
@@ -53,6 +54,15 @@ export default async function CaseStudyPage({ params }: PageProps) {
   const previous = index > 0 ? projects[index - 1] : undefined;
   const next = index < projects.length - 1 ? projects[index + 1] : undefined;
   const meta = [clientLine(project), project.year].filter(Boolean).join(" · ");
+
+  // The release tag is read from the GitHub API (never hard-coded) with the
+  // version-free releases page as the fallback. A failed lookup must never
+  // block rendering.
+  const stats = project.githubRepo
+    ? await getRepoStats(project.githubRepo)
+    : null;
+  const releaseHref =
+    stats?.latestRelease?.url ?? project.links?.releases ?? project.links?.release;
 
   return (
     <main className="mx-auto max-w-content px-6 py-24">
@@ -136,14 +146,14 @@ export default async function CaseStudyPage({ params }: PageProps) {
               [ VIEW ON GITHUB ]
             </a>
           ) : null}
-          {project.links.release ? (
+          {releaseHref ? (
             <a
-              href={project.links.release}
+              href={releaseHref}
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex w-fit font-mono text-xs uppercase tracking-widest text-accent-coral transition hover:text-accent-coral-dim"
             >
-              {releaseLabel(project.links.release)}
+              {releaseLabel(releaseHref)}
             </a>
           ) : null}
           {project.links.npm ? (

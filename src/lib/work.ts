@@ -58,5 +58,8 @@ export function clientLine(project: ProjectEntry): string {
 
 export function releaseLabel(url: string): string {
   const tag = url.split("/").pop();
-  return tag ? `[ RELEASE ${tag} ]` : "[ RELEASE ]";
+  // Only treat a version-like last segment as a tag; a bare `/releases` page
+  // is the version-free fallback, so it gets the generic label.
+  if (tag && /^v?\d/.test(tag)) return `[ RELEASE ${tag} ]`;
+  return "[ LATEST RELEASE ]";
 }

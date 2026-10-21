@@ -7,13 +7,13 @@ import { useMagnetic } from "@/lib/use-magnetic";
 
 const HOME_LINES = [
   "> 404: page not found",
-  "> commands: home, work, arcade, help",
+  "> commands: home, work, contact, help",
 ];
 
 const ROUTES: Record<string, string> = {
   home: "/",
   work: "/work",
-  arcade: "/arcade",
+  contact: "/contact",
   help: "help",
 };
 
@@ -40,16 +40,10 @@ export function NotFoundTerminal() {
     if (value === "help") {
       setLines((current) => [
         ...current,
-        { prompt: false, text: "> home   go to the homepage" },
-        { prompt: false, text: "> work   browse all work" },
-        { prompt: false, text: "> arcade play the games" },
+        { prompt: false, text: "> home     go to the homepage" },
+        { prompt: false, text: "> work     browse all work" },
+        { prompt: false, text: "> contact  send us a message" },
       ]);
-      return;
-    }
-
-    if (value === "arcade") {
-      setPendingHref("/arcade");
-      setLines((current) => [...current, { prompt: false, text: "> opening arcade..." }]);
       return;
     }
 
@@ -106,7 +100,7 @@ export function NotFoundTerminal() {
           onChange={(event) => setInput(event.target.value)}
           autoComplete="off"
           spellCheck={false}
-          placeholder="home | work | arcade | help"
+          placeholder="home | work | contact | help"
           aria-label="404 terminal command"
           className="min-h-11 w-full bg-transparent font-mono text-xs text-ink outline-none placeholder:text-muted-teal"
         />
@@ -125,7 +119,7 @@ export function NotFoundTerminal() {
       ) : null}
 
       <div className="border-t border-dark-border px-4 py-3">
-        <Button href="/arcade">PLAY ARCADE</Button>
+        <Button href="/work">VIEW WORK</Button>
       </div>
     </div>
   );

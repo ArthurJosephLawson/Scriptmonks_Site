@@ -10,6 +10,7 @@ const NAVIGATE = [
   { href: "/#about", label: "ABOUT" },
   { href: "/faq", label: "FAQ" },
   { href: "/contact", label: "CONTACT" },
+  { href: "/terms", label: "TERMS" },
   { href: "/privacy", label: "PRIVACY" },
 ] as const;
 

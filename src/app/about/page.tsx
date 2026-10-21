@@ -44,10 +44,10 @@ export default function AboutPage() {
           </p>
           <p className="mt-4 max-w-2xl text-sm text-muted-teal">
             An independent software development house, digital agency and
-            software incubator. The studio runs a hybrid model: client
-            client work plus proprietary products. The engineering standards are
-            clean code architecture, scalable system design, modular
-            development, and automated deployment setups.
+            software incubator. The studio runs a hybrid model: client work plus
+            proprietary products. The engineering standards are clean code
+            architecture, scalable system design, modular development, and
+            automated deployment setups.
           </p>
         </div>
       </div>

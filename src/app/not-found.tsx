@@ -14,8 +14,8 @@ export default function NotFound() {
             <Button href="/work" variant="secondary">
               VIEW WORK
             </Button>
-            <Button href="/arcade" variant="secondary">
-              PLAY ARCADE
+            <Button href="/contact" variant="secondary">
+              CONTACT US
             </Button>
           </>
         }

@@ -31,12 +31,15 @@ describe("portfolio data", () => {
     expect(projects).toHaveLength(expected);
   });
 
-  it("ships exact Wolf and DeployMonk links", () => {
+  it("ships exact Wolf and DeployMonk links without a hard-coded version", () => {
     const wolf = allProjects.find((p) => p.slug === "wolf");
     expect(wolf?.links).toEqual({
       repo: "https://github.com/ArthurJosephLawson/Wolf",
-      release: "https://github.com/ArthurJosephLawson/Wolf/releases/tag/v0.4.0",
+      releases: "https://github.com/ArthurJosephLawson/Wolf/releases",
     });
+    // SPEC_V5 §0: never hard-code Wolf's version. The tag must come from the
+    // GitHub API, so no `release`/`tag` URL may appear in the data.
+    expect(JSON.stringify(wolf)).not.toMatch(/v\d+\.\d+\.\d+/);
     const deploymonk = allProjects.find((p) => p.slug === "deploymonk");
     expect(deploymonk?.links?.npm).toBe("https://www.npmjs.com/package/deploymonk");
     expect(deploymonk?.install).toBe("npm install -g deploymonk");

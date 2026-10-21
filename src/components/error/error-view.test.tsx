@@ -49,8 +49,8 @@ describe("ErrorView", () => {
           <Button href="/work" variant="secondary">
             VIEW WORK
           </Button>
-          <Button href="/arcade" variant="secondary">
-            PLAY ARCADE
+          <Button href="/contact" variant="secondary">
+            CONTACT US
           </Button>
         </>
       ),
@@ -62,7 +62,7 @@ describe("ErrorView", () => {
     );
     expect(html).toContain("[ GO HOME ]");
     expect(html).toContain("VIEW WORK");
-    expect(html).toContain("PLAY ARCADE");
+    expect(html).toContain("CONTACT US");
     expect(html).toContain("[ EMAIL US ]");
     const mailto = mailtoOf(html);
     expect(mailto).toContain("mailto:script.monks.mail@gmail.com");
