@@ -618,8 +618,11 @@ splash: present, 3 lines verbatim, 2.5% coverage, key-skip, reduced-motion skip 
 - `scripts/check-lcp.mjs` — reports the real LCP element and its render time on a
   fresh session; the evidence tool for this decision.
 
-### `TODO(OWNER)`
+### Owner confirmation
 
-- The non-covering splash is a deliberate, owner-authorised amendment to
-  SPEC_V3 §106's "full-screen overlay" wording. If the full-screen overlay must
-  return, cold Performance falls back to ~50 and that trade-off is the owner's.
+**Confirmed by the owner after delivery.** The non-covering splash is an approved,
+deliberate amendment to SPEC_V3 §106's "full-screen overlay" wording — not a
+pending question. It is now the intended behaviour of the site.
+
+If the full-screen overlay is ever required again, cold Performance returns to
+~50 and that trade-off must be re-decided by the owner.
