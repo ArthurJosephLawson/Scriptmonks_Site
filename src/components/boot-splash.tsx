@@ -2,26 +2,12 @@
 
 import { useEffect, useState } from "react";
 
+const BOOT_KEY = "sm_boot_v1";
+
 /**
  * Boot splash (SPEC_V4 §3.1 + §4 perf, SPEC_V3 §106).
- *
- * Behaviour required by SPEC_V3 §106: on the first page load of a browser
- * session (`sessionStorage` key `sm_boot_v1`) show the coral mark fading in
- * with the 3 mono lines for at most 1.4 s; any key or click skips it;
- * `prefers-reduced-motion` skips it entirely; storage access is wrapped in
- * try/catch.
- *
- * NON-COVERING VARIANT (owner decision, V5-5): the spec's "full-screen overlay"
- * made the splash the Largest Contentful Paint on the cold path, because an
- * opaque full-viewport layer hides the real hero content and becomes the
- * largest painted element — measured in V4-3 at 4.7–5.5 s LCP, giving
- * Performance 47–52 against a ≥90 target. This variant keeps every other
- * requirement identical but anchors the splash to a contained panel, so the
- * page underneath paints normally and the hero wins LCP.
- *
- * It is client-only and lazy-loaded, so it never enters the server render and
- * costs no image bytes: the mark is drawn with a CSS mask over the live accent
- * colour (no per-theme PNG).
+ * Appears once per browser session, lasts at most 1.4 s, fades out, then unmounts.
+ * Skippable by any key or click, skipped under prefers-reduced-motion.
  */
 export function BootSplash() {
   const [visible, setVisible] = useState(false);
@@ -30,8 +16,8 @@ export function BootSplash() {
   useEffect(() => {
     let alreadySeen = false;
     try {
-      alreadySeen = sessionStorage.getItem("sm_boot_v1") === "1";
-      sessionStorage.setItem("sm_boot_v1", "1");
+      alreadySeen = sessionStorage.getItem(BOOT_KEY) === "1";
+      sessionStorage.setItem(BOOT_KEY, "1");
     } catch {}
     if (alreadySeen) return;
 
@@ -42,12 +28,17 @@ export function BootSplash() {
     setVisible(true);
 
     const t1 = setTimeout(() => setHide(true), 1400);
-    const t2 = setTimeout(() => setVisible(false), 1500);
-    const onKey = () => {
+    const t2 = setTimeout(() => {
+      setHide(true);
+      setVisible(false);
+    }, 1500);
+    const dismiss = () => {
       clearTimeout(t1);
       clearTimeout(t2);
+      setHide(true);
       setVisible(false);
     };
+    const onKey = () => dismiss();
     window.addEventListener("keydown", onKey, { once: true });
     window.addEventListener("click", onKey, { once: true });
     return () => {

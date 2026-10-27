@@ -50,7 +50,7 @@ describe("portfolio data", () => {
     expect(lonewolf?.links).toBeUndefined();
     expect(lonewolf?.gallery).toBe("lonewolf");
     expect(lonewolf?.status).toBe("private");
-    expect(lonewolf?.year).toBe("TODO(OWNER)");
+    expect(lonewolf?.year).toBe("2025");
   });
 
   it("validates entry shape: tagline <= 80 chars, 3-6 highlights, non-empty stack", () => {

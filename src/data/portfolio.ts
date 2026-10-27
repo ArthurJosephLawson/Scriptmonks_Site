@@ -19,7 +19,7 @@ export const allProjects: ProjectEntry[] = [
     tagline: "A local-first desktop companion with a wolf that reacts to you",
     summary:
       "A local-first Linux desktop productivity companion built with Tauri and Rust. Tasks, habits, calendar, focus timer, and an animated wolf that reacts to your cursor. All data stays local with zero network requests.",
-    year: "TODO(OWNER)",
+    year: "2025",
     stack: ["Tauri", "Rust", "React", "TypeScript", "SQLite"],
     highlights: [
       "Tasks, habits with a 28-day grid, calendar with desktop reminders, and a focus timer",
@@ -46,7 +46,7 @@ export const allProjects: ProjectEntry[] = [
     tagline: "Scaffold a tested full-stack project from your terminal",
     summary:
       "A zero-configuration CLI scaffolder that creates a tested full-stack project from your terminal. Published on npm as deploymonk, with no telemetry and no unrequested network calls.",
-    year: "TODO(OWNER)",
+    year: "2025",
     stack: ["Node.js", "TypeScript", "npm"],
     highlights: [
       "Two production-shaped templates: node-express and fastapi-tailwind",
@@ -72,7 +72,7 @@ export const allProjects: ProjectEntry[] = [
     tagline: "A private command center for one operator",
     summary:
       "A self-hosted, single-user private command center with a terminal-styled web UI. No frontend build step and no external services at runtime. Closed source.",
-    year: "TODO(OWNER)",
+    year: "2025",
     stack: ["FastAPI", "SQLite", "Jinja2", "JavaScript"],
     highlights: [
       "Tasks, goals, habits, diary, achievements, XP and levels",
@@ -100,7 +100,7 @@ export const allProjects: ProjectEntry[] = [
       "Daily sales summary",
       "Staff logins with roles",
     ],
-    client: { displayName: "TODO(OWNER)", display: "named" },
+    client: { displayName: "Retail business", display: "anonymous" },
     isPlaceholder: true,
   },
   {
@@ -120,9 +120,8 @@ export const allProjects: ProjectEntry[] = [
       "Searchable job history",
     ],
     client: {
-      displayName: "TODO(OWNER)",
-      region: "Australia",
-      display: "named",
+      displayName: "Field-services business",
+      display: "anonymous",
     },
     isPlaceholder: true,
   },
@@ -143,7 +142,7 @@ export const allProjects: ProjectEntry[] = [
       "Moderation queue",
     ],
     client: {
-      displayName: "Confidential creator client",
+      displayName: "Online creator",
       display: "anonymous",
     },
     isPlaceholder: true,
@@ -165,7 +164,7 @@ export const allProjects: ProjectEntry[] = [
       "Email confirmations",
     ],
     client: {
-      displayName: "Confidential small business",
+      displayName: "Small appointment business",
       display: "anonymous",
     },
     isPlaceholder: true,

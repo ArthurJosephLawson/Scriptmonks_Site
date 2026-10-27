@@ -17,7 +17,7 @@ export function Portfolio() {
           Track record
         </h2>
 
-        <div className="mt-12 grid gap-6 md:grid-cols-2">
+        <div className="mt-12 grid items-stretch gap-6 md:grid-cols-2">
           {featured.map((project) => (
             <ProductCard key={project.slug} project={project} />
           ))}
@@ -28,7 +28,7 @@ export function Portfolio() {
         </div>
 
         {clientEntries.length > 0 ? (
-          <div className="mt-16 grid gap-6 md:grid-cols-2">
+          <div className="mt-16 grid items-stretch gap-6 md:grid-cols-2">
             {clientEntries.map((project) => (
               <ClientCard key={project.slug} project={project} />
             ))}

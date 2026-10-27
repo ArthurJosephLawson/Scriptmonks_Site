@@ -25,7 +25,7 @@ export default function AboutPage() {
       </h1>
 
       <div className="mt-8">
-        <Image src="/brand/logo-full.png" alt="" width={598} height={114} className="w-56" />
+        <Image src="/brand/logo-full.png" alt={siteConfig.name} width={598} height={114} className="h-9 w-auto" />
       </div>
 
       <div className="mt-12 flex flex-col gap-6 border border-dark-border bg-dark-surface p-8 md:flex-row md:items-center">

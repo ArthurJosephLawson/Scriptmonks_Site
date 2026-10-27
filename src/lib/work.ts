@@ -50,10 +50,13 @@ export function suggestedType(slug: string): ProjectType {
 export function clientLine(project: ProjectEntry): string {
   const client = project.client;
   if (!client) return "";
-  if (client.display === "anonymous") return "CLIENT: Confidential";
-  return client.region
-    ? `CLIENT: ${client.displayName} · ${client.region}`
-    : `CLIENT: ${client.displayName}`;
+  if (client.display === "anonymous") {
+    if (client.displayName === "Confidential creator client") return "CLIENT: Online creator";
+    if (client.displayName === "Confidential small business") return "CLIENT: Small appointment business";
+    return `CLIENT: ${client.displayName}`;
+  }
+  if (client.region) return `CLIENT: ${client.displayName}`;
+  return `CLIENT: ${client.displayName}`;
 }
 
 export function releaseLabel(url: string): string {

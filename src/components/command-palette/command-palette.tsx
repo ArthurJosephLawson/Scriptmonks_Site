@@ -61,7 +61,7 @@ export function CommandPalette({ open, onOpenChange }: CommandPaletteProps) {
 
   return (
     <div className="fixed inset-0 z-50">
-      <div className="absolute inset-0 bg-black/60" onClick={() => onOpenChange(false)} />
+      <div className="absolute inset-0 bg-dark/80 backdrop-blur-sm" onClick={() => onOpenChange(false)} />
       <div className="relative mx-auto mt-[20vh] max-w-lg px-4">
         <Command
           label="Command palette"

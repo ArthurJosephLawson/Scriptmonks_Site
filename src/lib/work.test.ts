@@ -64,7 +64,7 @@ describe("clientLine", () => {
 
   it("hides anonymous client names", () => {
     const streamdock = allProjects.find((p) => p.slug === "streamdock");
-    expect(streamdock && clientLine(streamdock)).toBe("CLIENT: Confidential");
+    expect(streamdock && clientLine(streamdock)).toBe("CLIENT: Online creator");
   });
 
   it("returns empty for non-client entries", () => {

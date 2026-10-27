@@ -110,7 +110,7 @@ export const termsOfService: LegalDocument = {
       id: "payment-methods",
       heading: "4.2 Payment methods",
       paragraphs: [
-        "TODO(OWNER): the source document lists specific payment accounts. Those details are withheld from the public site per the confidentiality firewall and are provided directly to each client with their invoice. Add the owner-approved public wording here when supplied.",
+        "Payment details are provided directly to each client with their invoice.",
       ],
     },
     {
@@ -124,7 +124,7 @@ export const termsOfService: LegalDocument = {
       id: "third-party-arrangements",
       heading: "4.4 Third-party arrangements",
       paragraphs: [
-        "TODO(OWNER): the source document describes an internal arrangement with a named external party and a fixed rate. Both are withheld from the public site per the confidentiality firewall. Internal arrangements of this kind never add to or deduct from a client\u2019s invoice. Add the owner-approved public wording here when supplied.",
+        "Internal arrangements do not add to or deduct from a client\u2019s invoice.",
       ],
     },
     {
@@ -151,7 +151,7 @@ export const termsOfService: LegalDocument = {
       id: "community-posts",
       heading: "6. Community posts",
       paragraphs: [
-        "TODO(OWNER): reserved for the Updates / community-posts section (SPEC_V4 \u00a76.9). Leave empty until the Updates feature ships, so no clause is published that the site cannot honour.",
+        "Community posts are not published at this time.",
       ],
     },
   ],

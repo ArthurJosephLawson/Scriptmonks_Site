@@ -81,7 +81,7 @@ export async function deliverEmail(
 ): Promise<void> {
   const apiKey = process.env.RESEND_API_KEY;
   if (!apiKey) {
-    throw new Error("email: RESEND_API_KEY not set");
+    throw new Error("email: RESEND_API_KEY not set - configure it in environment variables (server-side only). See docs/SECURITY_AND_HOSTING.md");
   }
 
   const resend = new Resend(apiKey);

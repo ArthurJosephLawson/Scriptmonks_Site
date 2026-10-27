@@ -28,6 +28,11 @@
   body { @apply bg-transparent font-sans text-ink antialiased; }
   ::selection { background: rgb(var(--accent-coral)); color: #09181B; }
   :focus-visible { outline: 2px solid rgb(var(--accent-coral)); outline-offset: 2px; }
+  [tabindex="-1"]:focus,
+  [tabindex="-1"]:focus-visible {
+    outline: none;
+    outline-offset: 0;
+  }
   @media (prefers-reduced-motion: reduce) {
     :root { transition: none; }
     html { scroll-behavior: auto; }

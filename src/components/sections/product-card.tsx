@@ -49,10 +49,10 @@ export function ProductCard({ project }: { project: ProjectEntry }) {
   const showChrome = !project.install && project.kind !== "lab";
 
   return (
-    <CardInteractive className="flex flex-col">
+    <CardInteractive className="flex h-full flex-col">
       {showChrome ? <WindowChrome /> : null}
       <div className="flex flex-1 flex-col p-6">
-        <div className="flex items-center justify-between gap-3">
+        <div className="flex flex-wrap items-center justify-between gap-3">
           <h3 className="text-2xl font-bold tracking-tight text-ink">
             <Link
               href={`/work/${project.slug}`}
@@ -61,7 +61,7 @@ export function ProductCard({ project }: { project: ProjectEntry }) {
               {project.title}
             </Link>
           </h3>
-          <Badge>[ {STATUS_LABELS[project.status]} ]</Badge>
+          <Badge className="shrink-0 whitespace-nowrap">[ {STATUS_LABELS[project.status]} ]</Badge>
         </div>
         <p className="mt-3 text-sm text-muted-teal">{project.summary}</p>
         <div className="mt-4 flex flex-wrap gap-2">
@@ -78,7 +78,7 @@ export function ProductCard({ project }: { project: ProjectEntry }) {
             href={link}
             target="_blank"
             rel="noopener noreferrer"
-            className="mt-6 inline-flex w-fit font-mono text-xs uppercase tracking-widest text-accent-coral transition hover:text-accent-coral-dim"
+            className="mt-auto inline-flex w-fit pt-6 font-mono text-xs uppercase tracking-widest text-accent-coral transition hover:text-accent-coral-dim"
           >
             [ VIEW ]
           </a>

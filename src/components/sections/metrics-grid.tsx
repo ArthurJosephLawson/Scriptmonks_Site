@@ -17,7 +17,11 @@ export function MetricsGrid() {
   ];
 
   return (
-    <div className="grid grid-cols-2 gap-px border border-dark-border bg-dark-border md:grid-cols-4">
+    <div
+      className={`grid grid-cols-2 gap-px border border-dark-border bg-dark-border ${
+        tiles.length === 4 ? "md:grid-cols-4" : "md:grid-cols-3"
+      }`}
+    >
       {tiles.map((tile) => (
         <div key={tile.label} className="bg-dark-surface p-6 md:p-8">
           <p className="font-mono text-4xl font-bold tracking-tight text-ink md:text-5xl">

@@ -42,10 +42,13 @@ export function Footer() {
         <div className="grid gap-12 md:grid-cols-3">
           <div>
             <p className="flex items-center gap-3">
-              <Image src="/brand/logo-full.png" alt="" width={598} height={114} className="w-44 opacity-90" />
-              <span className="font-mono text-base font-bold tracking-tight text-ink">
-                {siteConfig.name}
-              </span>
+              <Image
+                src="/brand/logo-full.png"
+                alt={siteConfig.name}
+                width={598}
+                height={114}
+                className="h-9 w-auto opacity-100"
+              />
             </p>
             <p className="mt-3 max-w-xs text-sm text-muted-teal">
               {siteConfig.tagline}

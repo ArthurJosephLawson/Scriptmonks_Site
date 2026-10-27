@@ -8,11 +8,11 @@ export function ClientCard({ project }: { project: ProjectEntry }) {
   const meta = [clientLine(project), project.year].filter(Boolean).join(" · ");
 
   return (
-    <CardInteractive className="flex flex-col p-6">
-      <div className="flex items-center justify-between gap-3">
-        <Badge>[ {STATUS_LABELS[project.status]} ]</Badge>
+    <CardInteractive className="flex h-full flex-col p-6">
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <Badge className="shrink-0 whitespace-nowrap">[ {STATUS_LABELS[project.status]} ]</Badge>
         {meta ? (
-          <span className="font-mono text-xs uppercase tracking-widest text-muted-teal">
+          <span className="min-w-0 font-mono text-xs uppercase tracking-widest text-muted-teal">
             {meta}
           </span>
         ) : null}

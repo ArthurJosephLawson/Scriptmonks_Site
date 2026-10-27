@@ -108,3 +108,9 @@ Placeholders are marked `TODO(OWNER)` in code. Current list:
 - ~~Boot-splash vs cold-load performance trade-off~~ — **resolved in V5-5**: the
   splash is now a non-covering panel, so the hero wins LCP. See `docs/PROGRESS.md`, V5-5.
 - `SPEC_V3.md` is truncated; some historical tasks cannot be verified against it.
+
+## Credits, Security & Legal
+- [Credits & Attributions](docs/CREDITS.md) - All third-party dependencies and licenses
+- [Security & Hosting Guide](docs/SECURITY_AND_HOSTING.md) - Complete security documentation, hosting recommendations, and troubleshooting
+- [Security Policy](docs/SECURITY.md) - Security practices and reporting
+- [Deployment Guide](DEPLOY.md) - Step-by-step deployment instructions
