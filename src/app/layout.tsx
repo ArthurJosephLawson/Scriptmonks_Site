@@ -36,6 +36,9 @@ export const metadata: Metadata = {
   },
   description: siteConfig.description,
   keywords: ["ScriptMønks", "Scriptmonks", "Script Monks", "software house", "digital agency"],
+  verification: {
+    google: "pnUiLYtd_jya5kxqapQxcWi2QkvUFnG22VUTVBlErVE",
+  },
   openGraph: {
     title: {
       default: "ScriptMønks | Software House & Digital Agency",
